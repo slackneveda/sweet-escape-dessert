@@ -7,6 +7,28 @@ This template is your blank canvas. It comes with a minimal setup to help you ge
 - A clean, minimal Spark environment
 - Pre-configured for local development
 - Ready to scale with your ideas
+
+## 🛠️ Setup Instructions
+
+### Google Maps Integration (Optional)
+To enable interactive delivery location selection:
+
+1. **Get a Google Maps API Key**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+   - Enable the following APIs:
+     - Maps JavaScript API
+     - Geocoding API
+     - Places API (optional)
+
+2. **Configure the API Key**:
+   - Copy `.env.example` to `.env`
+   - Replace `YOUR_API_KEY_HERE` with your actual Google Maps API key
+   - Set appropriate restrictions for security
+
+3. **Fallback Behavior**:
+   - If no API key is configured, customers can still enter delivery addresses manually
+   - The app gracefully handles missing or invalid API keys
   
 🧠 What Can You Do?
 

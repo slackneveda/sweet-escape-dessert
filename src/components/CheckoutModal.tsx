@@ -11,10 +11,11 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StripePaymentForm } from '@/components/StripePaymentForm'
+import { DeliveryLocationMap } from '@/components/DeliveryLocationMap'
 import { useKV } from '@github/spark/hooks'
 import { useCart } from '@/contexts/CartContext'
 import { useWebhookListener } from '@/hooks/useWebhookListener'
-import { Cart, Order, CustomerInfo, PaymentInfo } from '@/types'
+import { Cart, Order, CustomerInfo, PaymentInfo, DeliveryLocation } from '@/types'
 import { toast } from 'sonner'
 
 interface CheckoutModalProps {
@@ -102,10 +103,17 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
       return false
     }
     
-    if (orderType === 'delivery' && customerInfo.address) {
-      const { street, city, state, zipCode } = customerInfo.address
-      if (!street || !city || !state || !zipCode) {
-        toast.error('Please fill in all delivery address fields')
+    if (orderType === 'delivery') {
+      // Check if delivery location is selected via map OR manual address is filled
+      const hasMapLocation = customerInfo.deliveryLocation
+      const hasManualAddress = customerInfo.address && 
+        customerInfo.address.street && 
+        customerInfo.address.city && 
+        customerInfo.address.state && 
+        customerInfo.address.zipCode
+
+      if (!hasMapLocation && !hasManualAddress) {
+        toast.error('Please select a delivery location on the map or fill in the address fields manually')
         return false
       }
     }
@@ -182,7 +190,8 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
         city: '',
         state: '',
         zipCode: ''
-      } : undefined
+      } : undefined,
+      deliveryLocation: undefined
     })
     setPaymentMethod('card')
   }
@@ -197,8 +206,39 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
         city: '',
         state: '',
         zipCode: ''
-      } : undefined
+      } : undefined,
+      deliveryLocation: undefined // Reset delivery location when switching
     }))
+  }
+
+  // Handle delivery location selection from map
+  const handleDeliveryLocationSelect = (location: DeliveryLocation) => {
+    setCustomerInfo(prev => {
+      // Parse the geocoded address to fill in individual fields
+      const addressParts = location.address.split(',').map(part => part.trim())
+      
+      // Try to intelligently parse the address components
+      const street = addressParts[0] || ''
+      const city = addressParts[1] || ''
+      const stateZip = addressParts[2] || ''
+      
+      // Extract state and zip from the last part (e.g., "CA 90210")
+      const stateZipMatch = stateZip.match(/^(.+?)\s+(\d{5}(?:-\d{4})?)$/)
+      const state = stateZipMatch ? stateZipMatch[1] : stateZip
+      const zipCode = stateZipMatch ? stateZipMatch[2] : ''
+
+      return {
+        ...prev,
+        deliveryLocation: location,
+        // Auto-populate address fields from geocoded address
+        address: {
+          street,
+          city,
+          state,
+          zipCode
+        }
+      }
+    })
   }
 
   if (currentStep === 'confirmation' && completedOrder) {
@@ -223,13 +263,19 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
               Order #{completedOrder.id.split('_')[1]}
             </p>
             
-            <div className="bg-muted p-4 rounded-lg mb-4">
+            <div className="bg-muted p-4 rounded-lg mb-4 space-y-2">
               <p className="text-sm">
                 {orderType === 'pickup' 
                   ? 'Your order will be ready for pickup in 20-30 minutes'
                   : 'Your order will be delivered in 45-60 minutes'
                 }
               </p>
+              {orderType === 'delivery' && completedOrder.customerInfo.deliveryLocation && (
+                <div className="text-left">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">Delivery Address:</p>
+                  <p className="text-xs">{completedOrder.customerInfo.deliveryLocation.address}</p>
+                </div>
+              )}
             </div>
             
             <Button onClick={handleClose} className="w-full">
@@ -324,44 +370,58 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
             {/* Delivery Address */}
             {orderType === 'delivery' && (
               <div className="space-y-4">
-                <Label className="text-base font-semibold">Delivery Address</Label>
-                <div>
-                  <Label htmlFor="street">Street Address *</Label>
-                  <Input
-                    id="street"
-                    value={customerInfo.address?.street || ''}
-                    onChange={(e) => handleAddressChange('street', e.target.value)}
-                    placeholder="123 Main Street"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="city">City *</Label>
-                    <Input
-                      id="city"
-                      value={customerInfo.address?.city || ''}
-                      onChange={(e) => handleAddressChange('city', e.target.value)}
-                      placeholder="City"
-                    />
+                {/* Interactive Map for Location Selection */}
+                <DeliveryLocationMap
+                  onLocationSelect={handleDeliveryLocationSelect}
+                  selectedLocation={customerInfo.deliveryLocation}
+                />
+                
+                {/* Manual Address Entry (Optional - auto-populated from map) */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-base font-semibold">Delivery Address Details</Label>
+                    <Badge variant="secondary" className="text-xs">
+                      Auto-filled from map selection
+                    </Badge>
                   </div>
                   <div>
-                    <Label htmlFor="state">State *</Label>
+                    <Label htmlFor="street">Street Address *</Label>
                     <Input
-                      id="state"
-                      value={customerInfo.address?.state || ''}
-                      onChange={(e) => handleAddressChange('state', e.target.value)}
-                      placeholder="State"
+                      id="street"
+                      value={customerInfo.address?.street || ''}
+                      onChange={(e) => handleAddressChange('street', e.target.value)}
+                      placeholder="123 Main Street"
                     />
                   </div>
-                </div>
-                <div>
-                  <Label htmlFor="zipCode">ZIP Code *</Label>
-                  <Input
-                    id="zipCode"
-                    value={customerInfo.address?.zipCode || ''}
-                    onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-                    placeholder="12345"
-                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="city">City *</Label>
+                      <Input
+                        id="city"
+                        value={customerInfo.address?.city || ''}
+                        onChange={(e) => handleAddressChange('city', e.target.value)}
+                        placeholder="City"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="state">State *</Label>
+                      <Input
+                        id="state"
+                        value={customerInfo.address?.state || ''}
+                        onChange={(e) => handleAddressChange('state', e.target.value)}
+                        placeholder="State"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="zipCode">ZIP Code *</Label>
+                    <Input
+                      id="zipCode"
+                      value={customerInfo.address?.zipCode || ''}
+                      onChange={(e) => handleAddressChange('zipCode', e.target.value)}
+                      placeholder="12345"
+                    />
+                  </div>
                 </div>
               </div>
             )}

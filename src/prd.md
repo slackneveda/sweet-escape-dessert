@@ -81,6 +81,38 @@ Sweet Delights needs to transition from a traditional cafe to a modern digital-f
   - Order status synchronization
   - Payment confirmation automation
 
+### 9. Interactive Delivery Location Selection
+- **Functionality**: Google Maps integration for delivery address selection with interactive map, location geocoding, and manual address fallback
+- **Purpose**: Provide customers with an intuitive way to specify delivery locations and ensure accurate delivery addresses
+- **Success Criteria**: Accurate address geocoding, seamless map interaction, fallback for areas without map access
+- **Map Features**:
+  - Interactive Google Maps with click-to-pin location selection
+  - Current location detection and auto-selection
+  - Address geocoding to convert coordinates to readable addresses
+  - Auto-population of address fields from map selection
+  - Manual address entry as fallback when maps aren't available
+  - Visual confirmation of selected delivery location
+
+## Technical Configuration Requirements
+
+### Google Maps API Setup
+- **Required APIs**: 
+  - Maps JavaScript API (for interactive map display)
+  - Geocoding API (for address conversion)
+  - Places API (optional, for enhanced search features)
+- **Environment Variable**: `VITE_GOOGLE_MAPS_API_KEY`
+- **Fallback Behavior**: Manual address entry when API is not configured or fails to load
+- **Setup Instructions**: 
+  1. Create Google Cloud Console project
+  2. Enable required APIs
+  3. Generate API key with appropriate restrictions
+  4. Set environment variable in `.env` file
+
+### Stripe API Configuration  
+- **Environment Variables**: Stripe publishable keys for test/live modes
+- **Required Features**: Payment processing, webhook handling, transaction tracking
+- **Admin Configuration**: Dashboard for key management and payment method settings
+
 ## Design Direction
 
 ### Visual Tone & Identity

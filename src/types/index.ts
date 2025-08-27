@@ -53,6 +53,12 @@ export interface Order {
   orderType: 'pickup' | 'delivery'
 }
 
+export interface DeliveryLocation {
+  lat: number
+  lng: number
+  address: string
+}
+
 export interface CustomerInfo {
   name: string
   email: string
@@ -63,6 +69,7 @@ export interface CustomerInfo {
     state: string
     zipCode: string
   }
+  deliveryLocation?: DeliveryLocation
 }
 
 export interface PaymentInfo {
