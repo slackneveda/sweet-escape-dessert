@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Dessert, Review } from '@/types'
 
@@ -183,15 +184,20 @@ export function DataInitializer() {
   const [desserts, setDesserts] = useKV<Dessert[]>('desserts', [])
   const [reviews, setReviews] = useKV<Review[]>('reviews', [])
 
-  // Initialize sample data if empty
-  if ((desserts || []).length === 0) {
-    setDesserts(sampleDesserts)
-  }
+  // Initialize sample data if empty using useEffect with safety checks
+  useEffect(() => {
+    const dessertsArray = Array.isArray(desserts) ? desserts : []
+    if (dessertsArray.length === 0) {
+      setDesserts(sampleDesserts)
+    }
+  }, [desserts, setDesserts])
 
-  // Initialize sample reviews if empty
-  if ((reviews || []).length === 0) {
-    setReviews(sampleReviews)
-  }
+  useEffect(() => {
+    const reviewsArray = Array.isArray(reviews) ? reviews : []
+    if (reviewsArray.length === 0) {
+      setReviews(sampleReviews)
+    }
+  }, [reviews, setReviews])
 
   return null
 }

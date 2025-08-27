@@ -23,10 +23,11 @@ export function MenuPage() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
   useEffect(() => {
+    const dessertsArray = Array.isArray(desserts) ? desserts : []
     if (selectedCategory === 'all') {
-      setFilteredDesserts((desserts || []).filter(d => d.available))
+      setFilteredDesserts(dessertsArray.filter(d => d.available))
     } else {
-      setFilteredDesserts((desserts || []).filter(d => d.category === selectedCategory && d.available))
+      setFilteredDesserts(dessertsArray.filter(d => d.category === selectedCategory && d.available))
     }
   }, [desserts, selectedCategory])
 

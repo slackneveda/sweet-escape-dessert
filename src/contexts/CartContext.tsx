@@ -18,7 +18,8 @@ const TAX_RATE = 0.0875 // 8.75% tax
 const DELIVERY_FEE = 4.99
 
 function calculateCartTotals(items: CartItem[] | undefined): Cart {
-  const itemsArray = items || []
+  // Ensure items is always an array to prevent length errors
+  const itemsArray = Array.isArray(items) ? items : []
   const subtotal = itemsArray.reduce((sum, item) => sum + (item.dessert.price * item.quantity), 0)
   const tax = subtotal * TAX_RATE
   const delivery = itemsArray.length > 0 ? DELIVERY_FEE : 0
@@ -45,7 +46,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     setCartItems(currentItems => {
-      const items = currentItems || []
+      // Ensure currentItems is always an array
+      const items = Array.isArray(currentItems) ? currentItems : []
       const existingItem = items.find(item => 
         item.dessert.id === dessert.id && 
         item.specialInstructions === specialInstructions
@@ -75,7 +77,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const removeFromCart = useCallback((itemId: string) => {
     setCartItems(currentItems => {
-      const items = currentItems || []
+      // Ensure currentItems is always an array
+      const items = Array.isArray(currentItems) ? currentItems : []
       const item = items.find(item => item.id === itemId)
       if (item) {
         toast.success(`Removed ${item.dessert.name} from cart`)
@@ -91,7 +94,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     setCartItems(currentItems => {
-      const items = currentItems || []
+      // Ensure currentItems is always an array
+      const items = Array.isArray(currentItems) ? currentItems : []
       return items.map(item =>
         item.id === itemId ? { ...item, quantity } : item
       )
@@ -104,7 +108,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [setCartItems])
 
   const getItemCount = useCallback(() => {
-    return (cartItems || []).reduce((count, item) => count + item.quantity, 0)
+    // Ensure cartItems is always an array before using reduce
+    const items = Array.isArray(cartItems) ? cartItems : []
+    return items.reduce((count, item) => count + item.quantity, 0)
   }, [cartItems])
 
   return (
