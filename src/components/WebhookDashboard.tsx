@@ -51,11 +51,11 @@ export function WebhookDashboard() {
       id: Date.now().toString(),
       timestamp: Date.now()
     }
-    setWebhookLogs(prev => [newLog, ...prev.slice(0, 49)]) // Keep last 50 logs
+    setWebhookLogs(prev => [newLog, ...(prev || []).slice(0, 49)]) // Keep last 50 logs
   }
 
   const simulateRealTimeWebhook = async () => {
-    if (orders.length === 0) {
+    if (!orders || orders.length === 0) {
       toast.error('No orders available for testing')
       return
     }
@@ -153,12 +153,12 @@ export function WebhookDashboard() {
   }
 
   const stats = {
-    totalLogs: webhookLogs.length,
-    successfulEvents: webhookLogs.filter(log => log.status === 'success').length,
-    errors: webhookLogs.filter(log => log.status === 'error').length,
-    avgDuration: webhookLogs
+    totalLogs: (webhookLogs || []).length,
+    successfulEvents: (webhookLogs || []).filter(log => log.status === 'success').length,
+    errors: (webhookLogs || []).filter(log => log.status === 'error').length,
+    avgDuration: (webhookLogs || [])
       .filter(log => log.duration)
-      .reduce((acc, log) => acc + (log.duration || 0), 0) / webhookLogs.filter(log => log.duration).length || 0
+      .reduce((acc, log) => acc + (log.duration || 0), 0) / ((webhookLogs || []).filter(log => log.duration).length || 1)
   }
 
   return (
@@ -269,7 +269,7 @@ export function WebhookDashboard() {
             <Button 
               variant="outline" 
               onClick={clearLogs}
-              disabled={webhookLogs.length === 0}
+              disabled={(webhookLogs || []).length === 0}
             >
               Clear Logs
             </Button>
@@ -292,14 +292,14 @@ export function WebhookDashboard() {
             <CardTitle>Webhook Event Logs</CardTitle>
             <CardDescription>Real-time log of webhook events and their processing status</CardDescription>
           </div>
-          {webhookLogs.length > 0 && (
+          {(webhookLogs || []).length > 0 && (
             <Badge variant="outline">
-              {webhookLogs.length} events
+              {(webhookLogs || []).length} events
             </Badge>
           )}
         </CardHeader>
         <CardContent>
-          {webhookLogs.length === 0 ? (
+          {(webhookLogs || []).length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Server className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No webhook events logged yet</p>
@@ -308,7 +308,7 @@ export function WebhookDashboard() {
           ) : (
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {webhookLogs.map((log, index) => (
+                {(webhookLogs || []).map((log, index) => (
                   <motion.div
                     key={log.id}
                     initial={{ opacity: 0, x: -20 }}

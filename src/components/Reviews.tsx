@@ -81,8 +81,8 @@ export function Reviews({ dessertId, dessertName }: ReviewsProps) {
     }
   }
 
-  const averageRating = reviews.length > 0 
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
+  const averageRating = (reviews || []).length > 0 
+    ? (reviews || []).reduce((sum, review) => sum + review.rating, 0) / (reviews || []).length 
     : 0
 
   const formatDate = (date: Date) => {
@@ -99,11 +99,11 @@ export function Reviews({ dessertId, dessertName }: ReviewsProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h3 className="text-lg font-semibold">Customer Reviews</h3>
-          {reviews.length > 0 && (
+          {(reviews || []).length > 0 && (
             <div className="flex items-center gap-2">
               <StarRating rating={averageRating} size="sm" />
               <span className="text-sm text-muted-foreground">
-                {averageRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? 's' : ''})
+                {averageRating.toFixed(1)} ({(reviews || []).length} review{(reviews || []).length !== 1 ? 's' : ''})
               </span>
             </div>
           )}
@@ -182,7 +182,7 @@ export function Reviews({ dessertId, dessertName }: ReviewsProps) {
 
       {/* Reviews List */}
       <div className="space-y-4">
-        {reviews.length === 0 ? (
+        {(reviews || []).length === 0 ? (
           <Card>
             <CardContent className="py-8 text-center">
               <p className="text-muted-foreground">
@@ -192,7 +192,7 @@ export function Reviews({ dessertId, dessertName }: ReviewsProps) {
           </Card>
         ) : (
           <AnimatePresence>
-            {reviews.map((review, index) => (
+            {(reviews || []).map((review, index) => (
               <motion.div
                 key={review.id}
                 initial={{ opacity: 0, y: 20 }}

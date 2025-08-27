@@ -35,7 +35,7 @@ function calculateCartTotals(items: CartItem[]): Cart {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useKV<CartItem[]>('cart-items', [])
 
-  const cart = calculateCartTotals(cartItems)
+  const cart = calculateCartTotals(cartItems || [])
 
   const addToCart = useCallback((dessert: Dessert, quantity = 1, specialInstructions?: string) => {
     if (!dessert.available) {
@@ -100,7 +100,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [setCartItems])
 
   const getItemCount = useCallback(() => {
-    return cartItems.reduce((count, item) => count + item.quantity, 0)
+    return (cartItems || []).reduce((count, item) => count + item.quantity, 0)
   }, [cartItems])
 
   return (

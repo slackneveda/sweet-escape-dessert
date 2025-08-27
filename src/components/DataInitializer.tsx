@@ -184,12 +184,12 @@ export function DataInitializer() {
   const [reviews, setReviews] = useKV<Review[]>('reviews', [])
 
   // Initialize sample data if empty
-  if (desserts.length === 0) {
+  if (desserts && desserts.length === 0) {
     setDesserts(sampleDesserts)
   }
 
   // Initialize sample reviews if empty
-  if (reviews.length === 0) {
+  if (reviews && reviews.length === 0) {
     setReviews(sampleReviews)
   }
 

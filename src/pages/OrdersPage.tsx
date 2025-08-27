@@ -24,7 +24,7 @@ export function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   
   // Set up webhook listeners for all pending orders
-  const pendingOrders = orders.filter(order => 
+  const pendingOrders = (orders || []).filter(order => 
     order.status === 'pending' && order.paymentInfo.status === 'pending'
   )
   
@@ -47,11 +47,11 @@ export function OrdersPage() {
   }, [setOrders])
 
   // Sort orders by date (newest first)
-  const sortedOrders = [...orders].sort((a, b) => 
+  const sortedOrders = [...(orders || [])].sort((a, b) => 
     new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
   )
 
-  if (orders.length === 0) {
+  if ((orders || []).length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">

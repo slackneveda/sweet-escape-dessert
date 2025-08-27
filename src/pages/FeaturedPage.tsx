@@ -10,7 +10,7 @@ import { TrendingUp, Crown, CreditCard, Shield, Clock } from '@phosphor-icons/re
 
 export function FeaturedPage() {
   const [desserts] = useKV<Dessert[]>('desserts', [])
-  const featuredDesserts = desserts.filter(d => d.featured && d.available)
+  const featuredDesserts = (desserts || []).filter(d => d.featured && d.available)
   const [selectedDessert, setSelectedDessert] = useState<Dessert | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 

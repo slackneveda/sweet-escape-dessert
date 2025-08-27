@@ -35,7 +35,7 @@ export function WebhookSimulator() {
     { value: 'payment_intent.requires_action', label: 'Requires Action', icon: Clock, color: 'text-yellow-600' }
   ]
 
-  const pendingOrders = orders.filter(order => 
+  const pendingOrders = (orders || []).filter(order => 
     order.status === 'pending' && order.paymentInfo.status === 'pending'
   )
 

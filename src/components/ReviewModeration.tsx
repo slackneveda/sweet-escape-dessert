@@ -39,7 +39,7 @@ export function ReviewModeration({ className }: ReviewModerationProps) {
   }
 
   // Filter reviews by status
-  const filteredReviews = reviews.filter(review => {
+  const filteredReviews = (reviews || []).filter(review => {
     switch (activeTab) {
       case 'pending':
         return review.status === 'pending'
@@ -152,10 +152,10 @@ export function ReviewModeration({ className }: ReviewModerationProps) {
   }
 
   const stats = {
-    pending: reviews.filter(r => r.status === 'pending').length,
-    approved: reviews.filter(r => r.status === 'approved').length,
-    rejected: reviews.filter(r => r.status === 'rejected').length,
-    total: reviews.length
+    pending: (reviews || []).filter(r => r.status === 'pending').length,
+    approved: (reviews || []).filter(r => r.status === 'approved').length,
+    rejected: (reviews || []).filter(r => r.status === 'rejected').length,
+    total: (reviews || []).length
   }
 
   return (

@@ -24,9 +24,9 @@ export function MenuPage() {
 
   useEffect(() => {
     if (selectedCategory === 'all') {
-      setFilteredDesserts(desserts.filter(d => d.available))
+      setFilteredDesserts((desserts || []).filter(d => d.available))
     } else {
-      setFilteredDesserts(desserts.filter(d => d.category === selectedCategory && d.available))
+      setFilteredDesserts((desserts || []).filter(d => d.category === selectedCategory && d.available))
     }
   }, [desserts, selectedCategory])
 

@@ -111,9 +111,9 @@ export function AdminPage() {
   }
 
   const stats = {
-    total: desserts.length,
-    featured: desserts.filter(d => d.featured).length,
-    available: desserts.filter(d => d.available).length,
+    total: (desserts || []).length,
+    featured: (desserts || []).filter(d => d.featured).length,
+    available: (desserts || []).filter(d => d.available).length,
   }
 
   return (
@@ -341,7 +341,7 @@ export function AdminPage() {
                 ))}
               </div>
 
-              {desserts.length === 0 && (
+              {(desserts || []).length === 0 && (
                 <div className="text-center py-12">
                   <span className="text-6xl mb-4 block">🧁</span>
                   <h3 className="text-2xl font-bold mb-4">No Desserts Yet</h3>
