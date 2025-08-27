@@ -48,7 +48,7 @@ export function WebhookTester() {
     try {
       // Subscribe to order updates to capture the result
       const unsubscribe = webhookService.subscribeToOrderUpdates(selectedOrderId, (update) => {
-        setTestResults(prev => [update, ...prev.slice(0, 9)]) // Keep last 10 results
+        setTestResults(prev => [update, ...(prev || []).slice(0, 9)]) // Keep last 10 results
         
         const eventTypeInfo = eventTypes.find(et => et.value === eventType)
         toast.success(`Webhook processed: ${eventTypeInfo?.label}`, {

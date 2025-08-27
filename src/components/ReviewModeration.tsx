@@ -55,7 +55,7 @@ export function ReviewModeration({ className }: ReviewModerationProps) {
   // Handle moderation action
   const handleModeration = async (action: 'approve' | 'reject', reviewId: string, note?: string) => {
     setReviews(current => 
-      current.map(review => 
+      (current || []).map(review => 
         review.id === reviewId 
           ? {
               ...review,
@@ -70,12 +70,12 @@ export function ReviewModeration({ className }: ReviewModerationProps) {
 
     // Update dessert rating if approved
     if (action === 'approve') {
-      const review = reviews.find(r => r.id === reviewId)
+      const review = (reviews || []).find(r => r.id === reviewId)
       if (review) {
         setDesserts(current => 
-          current.map(dessert => {
+          (current || []).map(dessert => {
             if (dessert.id === review.dessertId) {
-              const approvedReviews = reviews.filter(r => 
+              const approvedReviews = (reviews || []).filter(r => 
                 r.dessertId === dessert.id && 
                 (r.status === 'approved' || (r.id === reviewId))
               )

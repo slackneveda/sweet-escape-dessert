@@ -56,12 +56,12 @@ export function Reviews({ dessertId, dessertName }: ReviewsProps) {
         verified: true // In a real app, this would be based on purchase history
       }
 
-      setReviews(currentReviews => [newReview, ...currentReviews])
+      setReviews(currentReviews => [newReview, ...(currentReviews || [])])
       
       // Update dessert rating and review count
       const updatedRating = await updateDessertRating(dessertId)
       setDesserts(currentDesserts => 
-        currentDesserts.map(dessert => 
+        (currentDesserts || []).map(dessert => 
           dessert.id === dessertId 
             ? { ...dessert, ...updatedRating }
             : dessert

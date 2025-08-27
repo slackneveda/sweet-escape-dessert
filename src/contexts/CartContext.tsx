@@ -18,13 +18,14 @@ const TAX_RATE = 0.0875 // 8.75% tax
 const DELIVERY_FEE = 4.99
 
 function calculateCartTotals(items: CartItem[]): Cart {
-  const subtotal = items.reduce((sum, item) => sum + (item.dessert.price * item.quantity), 0)
+  const itemsArray = items || []
+  const subtotal = itemsArray.reduce((sum, item) => sum + (item.dessert.price * item.quantity), 0)
   const tax = subtotal * TAX_RATE
-  const delivery = items.length > 0 ? DELIVERY_FEE : 0
+  const delivery = itemsArray.length > 0 ? DELIVERY_FEE : 0
   const total = subtotal + tax + delivery
 
   return {
-    items,
+    items: itemsArray,
     subtotal: Math.round(subtotal * 100) / 100,
     tax: Math.round(tax * 100) / 100,
     delivery,
@@ -44,14 +45,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     setCartItems(currentItems => {
-      const existingItem = currentItems.find(item => 
+      const items = currentItems || []
+      const existingItem = items.find(item => 
         item.dessert.id === dessert.id && 
         item.specialInstructions === specialInstructions
       )
 
       if (existingItem) {
         // Update quantity of existing item
-        return currentItems.map(item =>
+        return items.map(item =>
           item.id === existingItem.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
@@ -64,7 +66,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           quantity,
           specialInstructions
         }
-        return [...currentItems, newItem]
+        return [...items, newItem]
       }
     })
 
@@ -73,11 +75,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const removeFromCart = useCallback((itemId: string) => {
     setCartItems(currentItems => {
-      const item = currentItems.find(item => item.id === itemId)
+      const items = currentItems || []
+      const item = items.find(item => item.id === itemId)
       if (item) {
         toast.success(`Removed ${item.dessert.name} from cart`)
       }
-      return currentItems.filter(item => item.id !== itemId)
+      return items.filter(item => item.id !== itemId)
     })
   }, [setCartItems])
 
@@ -87,11 +90,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return
     }
 
-    setCartItems(currentItems =>
-      currentItems.map(item =>
+    setCartItems(currentItems => {
+      const items = currentItems || []
+      return items.map(item =>
         item.id === itemId ? { ...item, quantity } : item
       )
-    )
+    })
   }, [setCartItems, removeFromCart])
 
   const clearCart = useCallback(() => {

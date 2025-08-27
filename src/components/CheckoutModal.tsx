@@ -71,8 +71,8 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
     }
     
     // Store in both user orders and all orders
-    setOrders(currentOrders => [...currentOrders, newOrder])
-    setAllOrders(allCurrentOrders => [...allCurrentOrders, newOrder])
+    setOrders(currentOrders => [...(currentOrders || []), newOrder])
+    setAllOrders(allCurrentOrders => [...(allCurrentOrders || []), newOrder])
     
     setCompletedOrder(newOrder)
     setCurrentStep('confirmation')

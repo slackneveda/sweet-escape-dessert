@@ -69,7 +69,7 @@ export function AdminPage() {
     if (editingDessert) {
       // Update existing dessert
       setDesserts((current) =>
-        current.map(d => d.id === editingDessert.id
+        (current || []).map(d => d.id === editingDessert.id
           ? { ...editingDessert, ...data }
           : d
         )
@@ -84,7 +84,7 @@ export function AdminPage() {
         reviewCount: 0,
         ...data
       }
-      setDesserts((current) => [...current, newDessert])
+      setDesserts((current) => [...(current || []), newDessert])
       toast.success('Dessert added successfully!')
     }
     
@@ -100,7 +100,7 @@ export function AdminPage() {
 
   const handleDelete = (dessert: Dessert) => {
     if (confirm(`Are you sure you want to delete "${dessert.name}"?`)) {
-      setDesserts((current) => current.filter(d => d.id !== dessert.id))
+      setDesserts((current) => (current || []).filter(d => d.id !== dessert.id))
       toast.success('Dessert deleted successfully!')
     }
   }
