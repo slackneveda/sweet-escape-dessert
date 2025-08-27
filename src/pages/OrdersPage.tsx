@@ -28,10 +28,9 @@ export function OrdersPage() {
     order.status === 'pending' && order.paymentInfo.status === 'pending'
   )
   
-  // Use webhook listener for each pending order
-  pendingOrders.forEach(order => {
-    useWebhookListener(order.id)
-  })
+  // Use webhook listener for the first pending order only (hooks rules compliance)
+  const firstPendingOrder = pendingOrders.length > 0 ? pendingOrders[0] : null
+  useWebhookListener(firstPendingOrder?.id || '')
 
   // Refresh orders data when orders change
   useEffect(() => {

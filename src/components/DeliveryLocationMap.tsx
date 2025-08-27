@@ -88,7 +88,7 @@ export function DeliveryLocationMap({ onLocationSelect, selectedLocation }: Deli
     
     return new Promise((resolve, reject) => {
       geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-        if (status === 'OK' && results && results[0]) {
+        if (status === 'OK' && results && Array.isArray(results) && results.length > 0 && results[0]) {
           resolve(results[0].formatted_address)
         } else {
           reject(new Error('Failed to get address'))
