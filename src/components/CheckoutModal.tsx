@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StripePaymentForm } from '@/components/StripePaymentForm'
 import { useKV } from '@github/spark/hooks'
 import { useCart } from '@/contexts/CartContext'
+import { useWebhookListener } from '@/hooks/useWebhookListener'
 import { Cart, Order, CustomerInfo, PaymentInfo } from '@/types'
 import { toast } from 'sonner'
 
@@ -27,10 +28,14 @@ type CheckoutStep = 'details' | 'payment' | 'confirmation'
 export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
   const { clearCart } = useCart()
   const [orders, setOrders] = useKV<Order[]>('user-orders', [])
+  const [allOrders, setAllOrders] = useKV<Order[]>('orders', []) // Store all orders for admin
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('details')
   const [orderType, setOrderType] = useState<'pickup' | 'delivery'>('pickup')
   const [isProcessing, setIsProcessing] = useState(false)
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
+
+  // Set up webhook listener for the completed order
+  useWebhookListener(completedOrder?.id)
 
   // Form state
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -47,25 +52,33 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
 
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'cash'>('card')
   
-  const handleStripePaymentSuccess = (paymentInfo: PaymentInfo) => {
+  const handleStripePaymentSuccess = async (paymentInfo: PaymentInfo) => {
+    const orderId = `order_${Date.now()}`
     const newOrder: Order = {
-      id: `order_${Date.now()}`,
+      id: orderId,
       userId: 'current-user', // In real app, get from auth context
       items: cart.items,
       total: cart.total,
       status: 'pending',
       orderDate: new Date(),
       customerInfo,
-      paymentInfo,
+      paymentInfo: {
+        ...paymentInfo,
+        // Ensure we have the payment intent ID for webhook tracking
+        stripePaymentIntentId: paymentInfo.stripePaymentIntentId || `pi_${Date.now()}`
+      },
       orderType
     }
     
+    // Store in both user orders and all orders
     setOrders(currentOrders => [...currentOrders, newOrder])
+    setAllOrders(allCurrentOrders => [...allCurrentOrders, newOrder])
+    
     setCompletedOrder(newOrder)
     setCurrentStep('confirmation')
     clearCart()
     
-    toast.success('Order placed successfully!')
+    toast.success('Order placed successfully! Payment processing...')
   }
 
   const handleStripePaymentError = (error: string) => {

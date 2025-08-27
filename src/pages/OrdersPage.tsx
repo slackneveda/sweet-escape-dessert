@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Clock, MapPin, CheckCircle, Package, Truck, XCircle } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { WebhookTesting } from '@/components/WebhookTesting'
 import { useKV } from '@github/spark/hooks'
+import { useWebhookListener } from '@/hooks/useWebhookListener'
 import { Order } from '@/types'
 
 const statusConfig = {
@@ -18,8 +20,31 @@ const statusConfig = {
 }
 
 export function OrdersPage() {
-  const [orders] = useKV<Order[]>('user-orders', [])
+  const [orders, setOrders] = useKV<Order[]>('user-orders', [])
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  
+  // Set up webhook listeners for all pending orders
+  const pendingOrders = orders.filter(order => 
+    order.status === 'pending' && order.paymentInfo.status === 'pending'
+  )
+  
+  // Use webhook listener for each pending order
+  pendingOrders.forEach(order => {
+    useWebhookListener(order.id)
+  })
+
+  // Refresh orders data when orders change
+  useEffect(() => {
+    const refreshOrders = async () => {
+      const latestOrders = await spark.kv.get<Order[]>('orders') || []
+      const userOrders = latestOrders.filter(order => order.userId === 'current-user') // In real app, use actual user ID
+      setOrders(userOrders)
+    }
+    
+    // Refresh orders every 30 seconds to catch webhook updates
+    const interval = setInterval(refreshOrders, 30000)
+    return () => clearInterval(interval)
+  }, [setOrders])
 
   // Sort orders by date (newest first)
   const sortedOrders = [...orders].sort((a, b) => 
@@ -187,8 +212,22 @@ export function OrdersPage() {
                                     <span className="font-mono text-xs">{order.paymentInfo.transactionId}</span>
                                   </div>
                                 )}
+                                {order.paymentInfo.stripePaymentIntentId && (
+                                  <div className="flex justify-between">
+                                    <span>Payment Intent ID:</span>
+                                    <span className="font-mono text-xs">{order.paymentInfo.stripePaymentIntentId}</span>
+                                  </div>
+                                )}
                               </div>
                             </div>
+
+                            {/* Webhook Testing (Development Only) */}
+                            {order.status === 'pending' && order.paymentInfo.status === 'pending' && (
+                              <WebhookTesting 
+                                orderId={order.id}
+                                paymentIntentId={order.paymentInfo.stripePaymentIntentId}
+                              />
+                            )}
 
                             {/* Order Status Help */}
                             {order.status === 'pending' && (

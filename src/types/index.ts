@@ -88,3 +88,27 @@ export interface Review {
   moderatedBy?: string
   moderatedAt?: Date
 }
+
+export interface StripeWebhookEvent {
+  id: string
+  type: string
+  created: number
+  data: {
+    object: any
+  }
+  livemode: boolean
+  pending_webhooks: number
+  request: {
+    id: string | null
+    idempotency_key: string | null
+  }
+}
+
+export interface PaymentStatusUpdate {
+  orderId: string
+  paymentIntentId: string
+  status: 'succeeded' | 'failed' | 'canceled' | 'processing' | 'requires_action'
+  amount: number
+  currency: string
+  metadata?: Record<string, string>
+}

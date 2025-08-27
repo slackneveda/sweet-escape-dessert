@@ -61,34 +61,41 @@ export function StripePaymentForm({
         throw new Error(createError.message || 'Failed to create payment method')
       }
 
-      // Since we don't have a real backend, we'll simulate the payment intent creation
-      // In a real app, you would create a payment intent on your backend with the cart total
-      const { error: confirmError } = await stripe.confirmCardPayment(
-        // This would normally come from your backend after creating a payment intent
-        // For demo purposes, we'll simulate a successful payment
-        'pi_demo_' + Date.now(), 
-        {
-          payment_method: paymentMethod.id
-        }
-      )
+      // Generate unique payment intent ID and order ID for demo
+      const orderId = `order_${Date.now()}`
+      const paymentIntentId = `pi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
-      if (confirmError) {
-        // Since we're using a demo payment intent, this will always fail
-        // But let's simulate success for the demo
-        console.log('Demo payment confirmation:', confirmError)
-      }
+      // In a real app, you would create a payment intent on your backend with metadata
+      // For demo purposes, we'll simulate this process
+      console.log('Creating payment intent with metadata:', {
+        orderId,
+        customerEmail,
+        amount: cart.total * 100, // Stripe uses cents
+        metadata: {
+          orderId: orderId,
+          customerEmail: customerEmail,
+          itemCount: cart.items.length.toString()
+        }
+      })
 
       // Simulate successful payment for demo
       const paymentInfo: PaymentInfo = {
         method: 'card',
-        status: 'paid',
-        transactionId: `pi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        status: 'pending', // Start as pending, will be updated by webhook
+        transactionId: paymentIntentId,
         amount: cart.total,
-        stripePaymentMethodId: paymentMethod.id
+        stripePaymentMethodId: paymentMethod.id,
+        stripePaymentIntentId: paymentIntentId
       }
 
-      toast.success('Payment processed successfully!')
+      toast.success('Payment submitted! Processing...')
       onPaymentSuccess(paymentInfo)
+
+      // Simulate webhook processing after a short delay
+      setTimeout(() => {
+        // This would normally be triggered by a real Stripe webhook
+        console.log('Simulating webhook processing for payment:', paymentIntentId)
+      }, 2000)
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Payment failed'

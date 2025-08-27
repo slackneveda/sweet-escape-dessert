@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { DessertCard } from '@/components/DessertCard'
 import { ReviewModeration } from '@/components/ReviewModeration'
 import { PaymentSettings } from '@/components/PaymentSettings'
+import { WebhookSimulator } from '@/components/WebhookSimulator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,7 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dessert } from '@/types'
-import { Plus, Shield, TrendingUp, Cake, MessageSquare, CreditCard } from '@phosphor-icons/react'
+import { Plus, Shield, TrendingUp, Cake, MessageSquare, CreditCard, Webhook } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { Navigate } from 'react-router-dom'
 
@@ -135,7 +136,7 @@ export function AdminPage() {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="menu" className="flex items-center gap-2">
               <Cake className="h-4 w-4" />
               Menu Management
@@ -147,6 +148,10 @@ export function AdminPage() {
             <TabsTrigger value="payments" className="flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
               Payment Settings
+            </TabsTrigger>
+            <TabsTrigger value="webhooks" className="flex items-center gap-2">
+              <Webhook className="h-4 w-4" />
+              Webhook Testing
             </TabsTrigger>
           </TabsList>
 
@@ -358,6 +363,16 @@ export function AdminPage() {
 
           <TabsContent value="payments">
             <PaymentSettings />
+          </TabsContent>
+
+          <TabsContent value="webhooks">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <WebhookSimulator />
+            </motion.div>
           </TabsContent>
         </Tabs>
       </div>
