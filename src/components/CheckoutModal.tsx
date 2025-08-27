@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { StripePaymentForm } from '@/components/StripePaymentForm'
 import { useKV } from '@github/spark/hooks'
 import { useCart } from '@/contexts/CartContext'
 import { Cart, Order, CustomerInfo, PaymentInfo } from '@/types'
@@ -45,12 +46,31 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
   })
 
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'cash'>('card')
-  const [cardInfo, setCardInfo] = useState({
-    number: '',
-    expiry: '',
-    cvc: '',
-    name: ''
-  })
+  
+  const handleStripePaymentSuccess = (paymentInfo: PaymentInfo) => {
+    const newOrder: Order = {
+      id: `order_${Date.now()}`,
+      userId: 'current-user', // In real app, get from auth context
+      items: cart.items,
+      total: cart.total,
+      status: 'pending',
+      orderDate: new Date(),
+      customerInfo,
+      paymentInfo,
+      orderType
+    }
+    
+    setOrders(currentOrders => [...currentOrders, newOrder])
+    setCompletedOrder(newOrder)
+    setCurrentStep('confirmation')
+    clearCart()
+    
+    toast.success('Order placed successfully!')
+  }
+
+  const handleStripePaymentError = (error: string) => {
+    toast.error(error)
+  }
 
   const handleCustomerInfoChange = (field: keyof CustomerInfo, value: string) => {
     setCustomerInfo(prev => ({ ...prev, [field]: value }))
@@ -81,65 +101,53 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
   }
 
   const validatePayment = () => {
-    if (paymentMethod === 'cash') return true
+    if (paymentMethod === 'cash' || paymentMethod === 'paypal') return true
     
-    if (paymentMethod === 'card') {
-      if (!cardInfo.number || !cardInfo.expiry || !cardInfo.cvc || !cardInfo.name) {
-        toast.error('Please fill in all card details')
-        return false
-      }
-    }
+    // For Stripe payments, validation is handled by the StripePaymentForm component
+    if (paymentMethod === 'card') return true
     
     return true
   }
 
   const processPayment = async (): Promise<PaymentInfo> => {
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    // Simulate payment success (90% success rate)
-    const isSuccess = Math.random() > 0.1
-    
-    if (!isSuccess) {
-      throw new Error('Payment failed. Please try again.')
+    // For non-card payments, simulate processing
+    if (paymentMethod !== 'card') {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // Simulate payment success (95% success rate for non-card payments)
+      const isSuccess = Math.random() > 0.05
+      
+      if (!isSuccess) {
+        throw new Error('Payment failed. Please try again.')
+      }
+      
+      return {
+        method: paymentMethod,
+        status: 'paid',
+        transactionId: `txn_${Date.now()}`,
+        amount: cart.total
+      }
     }
     
-    return {
-      method: paymentMethod,
-      status: 'paid',
-      transactionId: `txn_${Date.now()}`,
-      amount: cart.total
-    }
+    // Card payments are handled by StripePaymentForm
+    throw new Error('Card payments should be handled by Stripe component')
   }
 
   const handlePlaceOrder = async () => {
+    if (paymentMethod === 'card') {
+      // Stripe payments are handled by the StripePaymentForm component
+      return
+    }
+    
     if (!validatePayment()) return
     
     setIsProcessing(true)
     
     try {
       const paymentInfo = await processPayment()
-      
-      const newOrder: Order = {
-        id: `order_${Date.now()}`,
-        userId: 'current-user', // In real app, get from auth context
-        items: cart.items,
-        total: cart.total,
-        status: 'pending',
-        orderDate: new Date(),
-        customerInfo,
-        paymentInfo,
-        orderType
-      }
-      
-      setOrders(currentOrders => [...currentOrders, newOrder])
-      setCompletedOrder(newOrder)
-      setCurrentStep('confirmation')
-      clearCart()
-      
-      toast.success('Order placed successfully!')
+      handleStripePaymentSuccess(paymentInfo) // Reuse the same success handler
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Payment failed')
+      handleStripePaymentError(error instanceof Error ? error.message : 'Payment failed')
     } finally {
       setIsProcessing(false)
     }
@@ -163,12 +171,7 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
         zipCode: ''
       } : undefined
     })
-    setCardInfo({
-      number: '',
-      expiry: '',
-      cvc: '',
-      name: ''
-    })
+    setPaymentMethod('card')
   }
 
   // Update address when order type changes
@@ -406,7 +409,7 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
 
         {currentStep === 'payment' && (
           <div className="space-y-6">
-            {/* Payment Method */}
+            {/* Payment Method Selection */}
             <div>
               <Label className="text-base font-semibold">Payment Method</Label>
               <RadioGroup 
@@ -418,7 +421,7 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
                   <RadioGroupItem value="card" id="card" />
                   <Label htmlFor="card" className="flex items-center gap-2">
                     <CreditCard size={16} />
-                    Credit/Debit Card
+                    Credit/Debit Card (Stripe)
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -432,84 +435,87 @@ export function CheckoutModal({ isOpen, onClose, cart }: CheckoutModalProps) {
               </RadioGroup>
             </div>
 
-            {/* Card Details */}
+            {/* Stripe Card Payment */}
             {paymentMethod === 'card' && (
-              <div className="space-y-4">
-                <Label className="text-base font-semibold">Card Details</Label>
-                <div>
-                  <Label htmlFor="cardName">Name on Card</Label>
-                  <Input
-                    id="cardName"
-                    value={cardInfo.name}
-                    onChange={(e) => setCardInfo(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="cardNumber">Card Number</Label>
-                  <Input
-                    id="cardNumber"
-                    value={cardInfo.number}
-                    onChange={(e) => setCardInfo(prev => ({ ...prev, number: e.target.value }))}
-                    placeholder="1234 5678 9012 3456"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="expiry">Expiry Date</Label>
-                    <Input
-                      id="expiry"
-                      value={cardInfo.expiry}
-                      onChange={(e) => setCardInfo(prev => ({ ...prev, expiry: e.target.value }))}
-                      placeholder="MM/YY"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="cvc">CVC</Label>
-                    <Input
-                      id="cvc"
-                      value={cardInfo.cvc}
-                      onChange={(e) => setCardInfo(prev => ({ ...prev, cvc: e.target.value }))}
-                      placeholder="123"
-                    />
-                  </div>
-                </div>
-              </div>
+              <StripePaymentForm
+                cart={cart}
+                customerEmail={customerInfo.email}
+                onPaymentSuccess={handleStripePaymentSuccess}
+                onPaymentError={handleStripePaymentError}
+                isProcessing={isProcessing}
+                setIsProcessing={setIsProcessing}
+              />
             )}
 
+            {/* PayPal Payment */}
             {paymentMethod === 'paypal' && (
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="text-sm text-muted-foreground">
-                  You will be redirected to PayPal to complete your payment.
-                </p>
+              <div className="space-y-4">
+                <div className="p-4 bg-muted rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    You will be redirected to PayPal to complete your payment.
+                  </p>
+                </div>
+                
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setCurrentStep('details')}
+                    className="flex-1"
+                  >
+                    Back
+                  </Button>
+                  <Button 
+                    onClick={handlePlaceOrder}
+                    disabled={isProcessing}
+                    className="flex-1"
+                  >
+                    {isProcessing ? 'Processing...' : `Pay with PayPal - $${cart.total.toFixed(2)}`}
+                  </Button>
+                </div>
               </div>
             )}
 
+            {/* Cash Payment */}
             {paymentMethod === 'cash' && (
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="text-sm text-muted-foreground">
-                  You can pay with cash when you {orderType === 'pickup' ? 'pick up' : 'receive'} your order.
-                  Please have exact change ready.
-                </p>
+              <div className="space-y-4">
+                <div className="p-4 bg-muted rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    You can pay with cash when you {orderType === 'pickup' ? 'pick up' : 'receive'} your order.
+                    Please have exact change ready.
+                  </p>
+                </div>
+                
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setCurrentStep('details')}
+                    className="flex-1"
+                  >
+                    Back
+                  </Button>
+                  <Button 
+                    onClick={handlePlaceOrder}
+                    disabled={isProcessing}
+                    className="flex-1"
+                  >
+                    {isProcessing ? 'Processing...' : `Place Order - $${cart.total.toFixed(2)}`}
+                  </Button>
+                </div>
               </div>
             )}
 
-            <div className="flex gap-3">
-              <Button 
-                variant="outline" 
-                onClick={() => setCurrentStep('details')}
-                className="flex-1"
-              >
-                Back
-              </Button>
-              <Button 
-                onClick={handlePlaceOrder}
-                disabled={isProcessing}
-                className="flex-1"
-              >
-                {isProcessing ? 'Processing...' : `Place Order - $${cart.total.toFixed(2)}`}
-              </Button>
-            </div>
+            {/* Back button for card payments is handled within StripePaymentForm */}
+            {paymentMethod === 'card' && (
+              <div className="flex">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCurrentStep('details')}
+                  className="flex-1"
+                >
+                  Back to Details
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </DialogContent>

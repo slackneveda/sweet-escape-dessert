@@ -5,6 +5,7 @@ import { useKV } from '@github/spark/hooks'
 import { useForm } from 'react-hook-form'
 import { DessertCard } from '@/components/DessertCard'
 import { ReviewModeration } from '@/components/ReviewModeration'
+import { PaymentSettings } from '@/components/PaymentSettings'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -15,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dessert } from '@/types'
-import { Plus, Shield, TrendingUp, Cake, MessageSquare } from '@phosphor-icons/react'
+import { Plus, Shield, TrendingUp, Cake, MessageSquare, CreditCard } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { Navigate } from 'react-router-dom'
 
@@ -134,7 +135,7 @@ export function AdminPage() {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="menu" className="flex items-center gap-2">
               <Cake className="h-4 w-4" />
               Menu Management
@@ -142,6 +143,10 @@ export function AdminPage() {
             <TabsTrigger value="reviews" className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
               Review Moderation
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="flex items-center gap-2">
+              <CreditCard className="h-4 w-4" />
+              Payment Settings
             </TabsTrigger>
           </TabsList>
 
@@ -349,6 +354,10 @@ export function AdminPage() {
 
           <TabsContent value="reviews">
             <ReviewModeration />
+          </TabsContent>
+
+          <TabsContent value="payments">
+            <PaymentSettings />
           </TabsContent>
         </Tabs>
       </div>

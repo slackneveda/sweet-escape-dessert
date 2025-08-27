@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
+import { StripeProvider } from '@/contexts/StripeContext'
 import { DataInitializer } from '@/components/DataInitializer'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
@@ -100,21 +101,23 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <CartProvider>
-          <Router>
-            <DataInitializer />
-            <div className="min-h-screen bg-background text-foreground flex flex-col">
-              <Navbar />
-              
-              <main className="flex-1">
-                <AnimatedRoutes />
-              </main>
-              
-              <Footer />
-              <Toaster position="bottom-right" />
-            </div>
-          </Router>
-        </CartProvider>
+        <StripeProvider>
+          <CartProvider>
+            <Router>
+              <DataInitializer />
+              <div className="min-h-screen bg-background text-foreground flex flex-col">
+                <Navbar />
+                
+                <main className="flex-1">
+                  <AnimatedRoutes />
+                </main>
+                
+                <Footer />
+                <Toaster position="bottom-right" />
+              </div>
+            </Router>
+          </CartProvider>
+        </StripeProvider>
       </AuthProvider>
     </ThemeProvider>
   )

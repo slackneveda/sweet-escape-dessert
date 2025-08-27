@@ -35,10 +35,16 @@ Sweet Delights needs to transition from a traditional cafe to a modern digital-f
 - **Purpose**: Convert browsing into completed purchases with secure payment handling
 - **Success Criteria**: High conversion rate, minimal cart abandonment, secure transaction processing
 
-### 3. Payment Integration
-- **Functionality**: Support for credit cards, PayPal, and cash payments with transaction tracking
-- **Purpose**: Provide flexible payment options for different customer preferences
-- **Success Criteria**: 99%+ payment success rate, secure transaction handling, PCI compliance
+### 3. Payment Integration (Stripe-Powered)
+- **Functionality**: Secure credit/debit card processing via Stripe, PayPal integration, and cash payment options with full transaction tracking
+- **Purpose**: Provide flexible, secure payment options with professional-grade payment processing
+- **Success Criteria**: 99%+ payment success rate, PCI-compliant transaction handling, support for test and live modes
+- **Stripe Features**: 
+  - Secure tokenized payments with Stripe Elements
+  - Support for all major credit/debit cards
+  - Test mode with development test cards
+  - Admin dashboard for payment configuration
+  - Transaction tracking and receipt generation
 
 ### 4. Order Management
 - **Functionality**: Order history, status tracking, delivery estimates, reordering capability
@@ -61,9 +67,14 @@ Sweet Delights needs to transition from a traditional cafe to a modern digital-f
 - **Success Criteria**: Efficient moderation workflow, clear approval/rejection reasons, maintained review authenticity
 
 ### 8. Admin Dashboard
-- **Functionality**: Product management (add, edit, delete), review moderation, order tracking, analytics
-- **Purpose**: Provide business owners comprehensive control over their online presence
-- **Success Criteria**: Intuitive interface, real-time updates, comprehensive management capabilities
+- **Functionality**: Product management (add, edit, delete), review moderation, payment settings configuration, order tracking, analytics
+- **Purpose**: Provide business owners comprehensive control over their online presence and payment processing
+- **Success Criteria**: Intuitive interface, real-time updates, comprehensive management capabilities, secure payment configuration
+- **Payment Management**: 
+  - Stripe API key configuration (test/live modes)
+  - Payment method toggles (card/PayPal/cash)
+  - Transaction monitoring and security settings
+  - Test card information for development
 
 ## Design Direction
 

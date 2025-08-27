@@ -4,8 +4,9 @@ import { useKV } from '@github/spark/hooks'
 import { DessertCard } from '@/components/DessertCard'
 import { DessertDetailModal } from '@/components/DessertDetailModal'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
 import { Dessert } from '@/types'
-import { TrendingUp, Crown } from '@phosphor-icons/react'
+import { TrendingUp, Crown, CreditCard, Shield, Clock } from '@phosphor-icons/react'
 
 export function FeaturedPage() {
   const [desserts] = useKV<Dessert[]>('desserts', [])
@@ -63,6 +64,51 @@ export function FeaturedPage() {
             <h3 className="text-2xl font-bold">Best Sellers</h3>
             <p className="text-muted-foreground">Customer Picks</p>
           </div>
+        </motion.div>
+
+        {/* Payment Features Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-12"
+        >
+          <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center mb-4">
+                <h3 className="text-xl font-semibold text-center">Secure & Easy Checkout</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <CreditCard className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Stripe Payments</p>
+                    <p className="text-sm text-muted-foreground">Secure card processing</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Shield className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Bank-Level Security</p>
+                    <p className="text-sm text-muted-foreground">Your data is protected</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Clock className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Quick Checkout</p>
+                    <p className="text-sm text-muted-foreground">Order in under 2 minutes</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
         {featuredDesserts.length > 0 ? (

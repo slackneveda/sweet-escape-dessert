@@ -70,6 +70,8 @@ export interface PaymentInfo {
   status: 'pending' | 'paid' | 'failed' | 'refunded'
   transactionId?: string
   amount: number
+  stripePaymentMethodId?: string
+  stripePaymentIntentId?: string
 }
 
 export interface Review {
