@@ -1,1 +1,138 @@
-/* This is where custom CSS goes */
+@import 'tailwindcss';
+@import "tw-animate-css";
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+:root {
+  /* Base colors */
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0.3 0.1 25); /* Rust for text */
+
+  --card: oklch(0.99 0.005 85); /* Warm cream */
+  --card-foreground: oklch(0.3 0.1 25); /* Rust */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.3 0.1 25);
+
+  /* Action colors */
+  --primary: oklch(0.3 0.1 25); /* Rust #B7410E */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.97 0.005 85); /* Light cream */
+  --secondary-foreground: oklch(0.3 0.1 25); /* Rust */
+  --accent: oklch(0.95 0.01 85); /* Warm accent */
+  --accent-foreground: oklch(0.3 0.1 25);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Supporting colors */
+  --muted: oklch(0.97 0.005 85);
+  --muted-foreground: oklch(0.556 0.05 25);
+  --border: oklch(0.922 0.01 85);
+  --input: oklch(0.922 0.01 85);
+  --ring: oklch(0.3 0.1 25);
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Base colors */
+  --background: oklch(0.08 0 0); /* Near black */
+  --foreground: oklch(0.98 0.005 85); /* Warm white */
+
+  --card: oklch(0.12 0.01 25); /* Dark rust tint */
+  --card-foreground: oklch(0.98 0.005 85);
+  --popover: oklch(0.12 0.01 25);
+  --popover-foreground: oklch(0.98 0.005 85);
+
+  /* Action colors */
+  --primary: oklch(0.45 0.12 25); /* Lighter rust for dark mode */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.15 0.02 25);
+  --secondary-foreground: oklch(0.98 0.005 85);
+  --accent: oklch(0.18 0.03 25);
+  --accent-foreground: oklch(0.98 0.005 85);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Supporting colors */
+  --muted: oklch(0.15 0.02 25);
+  --muted-foreground: oklch(0.708 0.05 25);
+  --border: oklch(0.18 0.03 25);
+  --input: oklch(0.18 0.03 25);
+  --ring: oklch(0.45 0.12 25);
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-full: 9999px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improve scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better focus styles */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Improved line clamping */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
