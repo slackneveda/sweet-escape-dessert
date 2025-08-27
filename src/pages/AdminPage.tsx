@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { DessertCard } from '@/components/DessertCard'
 import { ReviewModeration } from '@/components/ReviewModeration'
 import { PaymentSettings } from '@/components/PaymentSettings'
-import { WebhookSimulator } from '@/components/WebhookSimulator'
+import { WebhookDashboard } from '@/components/WebhookDashboard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -371,7 +371,7 @@ export function AdminPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <WebhookSimulator />
+              <WebhookDashboard />
             </motion.div>
           </TabsContent>
         </Tabs>
