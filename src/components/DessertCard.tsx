@@ -2,17 +2,19 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { AddToCartButton } from '@/components/AddToCartButton'
 import { Dessert } from '@/types'
 
 interface DessertCardProps {
   dessert: Dessert
   onSelect?: (dessert: Dessert) => void
   showActions?: boolean
+  showCartButton?: boolean
   onEdit?: (dessert: Dessert) => void
   onDelete?: (dessert: Dessert) => void
 }
 
-export function DessertCard({ dessert, onSelect, showActions, onEdit, onDelete }: DessertCardProps) {
+export function DessertCard({ dessert, onSelect, showActions, showCartButton = true, onEdit, onDelete }: DessertCardProps) {
   return (
     <motion.div
       whileHover={{ y: -4, scale: 1.02 }}
@@ -36,8 +38,8 @@ export function DessertCard({ dessert, onSelect, showActions, onEdit, onDelete }
           )}
         </div>
         
-        <CardContent className="p-4" onClick={() => onSelect?.(dessert)}>
-          <div className="space-y-2">
+        <CardContent className="p-4">
+          <div className="space-y-3" onClick={() => onSelect?.(dessert)}>
             <div className="flex items-start justify-between">
               <h3 className="font-semibold text-lg leading-tight">{dessert.name}</h3>
               <span className="font-bold text-primary">${dessert.price.toFixed(2)}</span>
@@ -47,36 +49,49 @@ export function DessertCard({ dessert, onSelect, showActions, onEdit, onDelete }
               {dessert.description}
             </p>
             
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center justify-between">
               <Badge variant="secondary" className="capitalize">
                 {dessert.category.replace('-', ' ')}
               </Badge>
-              
-              {showActions && (
-                <div className="flex space-x-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onEdit?.(dessert)
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onDelete?.(dessert)
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
             </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="mt-4 space-y-2">
+            {showCartButton && (
+              <AddToCartButton 
+                dessert={dessert} 
+                className="w-full"
+                showQuantitySelector={true}
+              />
+            )}
+            
+            {showActions && (
+              <div className="flex space-x-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onEdit?.(dessert)
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="flex-1"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDelete?.(dessert)
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

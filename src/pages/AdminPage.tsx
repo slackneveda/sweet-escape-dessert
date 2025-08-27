@@ -302,6 +302,7 @@ export function AdminPage() {
               <DessertCard
                 dessert={dessert}
                 showActions
+                showCartButton={false}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />

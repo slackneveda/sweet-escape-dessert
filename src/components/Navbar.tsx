@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { CartIcon } from '@/components/CartIcon'
+import { CartSidebar } from '@/components/CartSidebar'
 import { useAuth } from '@/contexts/AuthContext'
 import { List, Cake } from '@phosphor-icons/react'
 
@@ -11,11 +13,13 @@ const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Menu', path: '/menu' },
   { name: 'Featured', path: '/featured' },
+  { name: 'Orders', path: '/orders' },
   { name: 'Contact', path: '/contact' },
 ]
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
   const location = useLocation()
   const { user } = useAuth()
 
@@ -83,11 +87,13 @@ export function Navbar() {
                 <Button variant="outline" size="sm">Admin</Button>
               </Link>
             )}
+            <CartIcon onClick={() => setIsCartOpen(true)} />
             <ThemeToggle />
           </div>
 
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center space-x-2">
+            <CartIcon onClick={() => setIsCartOpen(true)} />
             <ThemeToggle />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -120,6 +126,9 @@ export function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Cart Sidebar */}
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   )
 }
