@@ -23,7 +23,10 @@ export class WebhookService {
     if (!this.listeners.has(orderId)) {
       this.listeners.set(orderId, [])
     }
-    this.listeners.get(orderId)!.push(callback)
+    const callbacks = this.listeners.get(orderId)
+    if (callbacks) {
+      callbacks.push(callback)
+    }
     
     // Return unsubscribe function
     return () => {
@@ -184,7 +187,7 @@ export class WebhookService {
       const orders = await spark.kv.get<Order[]>('orders') || []
       
       // Find and update the order
-      const orderIndex = orders.findIndex(order => order.id === orderId)
+      const orderIndex = (orders || []).findIndex(order => order.id === orderId)
       if (orderIndex !== -1) {
         orders[orderIndex] = {
           ...orders[orderIndex],

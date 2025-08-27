@@ -46,7 +46,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               <div className="flex items-center justify-between p-4 border-b border-border">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
                   <ShoppingBag size={20} />
-                  Your Cart ({cart.items.length})
+                  Your Cart ({(cart.items || []).length})
                 </h2>
                 <Button variant="ghost" size="icon" onClick={onClose}>
                   <X size={20} />
@@ -55,7 +55,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
               {/* Cart Items */}
               <div className="flex-1 overflow-y-auto p-4">
-                {cart.items.length === 0 ? (
+                {(cart.items || []).length === 0 ? (
                   <div className="text-center py-8">
                     <ShoppingBag size={48} className="mx-auto text-muted-foreground mb-4" />
                     <p className="text-muted-foreground">Your cart is empty</p>
@@ -65,7 +65,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {cart.items.map((item) => (
+                    {(cart.items || []).map((item) => (
                       <motion.div
                         key={item.id}
                         layout
@@ -136,7 +136,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               </div>
 
               {/* Footer with totals and checkout */}
-              {cart.items.length > 0 && (
+              {(cart.items || []).length > 0 && (
                 <div className="border-t border-border p-4 space-y-3">
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">

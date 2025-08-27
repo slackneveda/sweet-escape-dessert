@@ -206,14 +206,14 @@ export function WebhookTester() {
               Recent webhook test results
             </CardDescription>
           </div>
-          {testResults.length > 0 && (
+          {(testResults || []).length > 0 && (
             <Button variant="outline" size="sm" onClick={clearTestResults}>
               Clear
             </Button>
           )}
         </CardHeader>
         <CardContent>
-          {testResults.length === 0 ? (
+          {(testResults || []).length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Zap className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No test results yet</p>
@@ -268,7 +268,7 @@ export function WebhookTester() {
                         </div>
                       </CardContent>
                     </Card>
-                    {index < testResults.length - 1 && <Separator className="my-2" />}
+                    {index < (testResults || []).length - 1 && <Separator className="my-2" />}
                   </motion.div>
                 ))}
               </div>

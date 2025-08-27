@@ -81,7 +81,7 @@ export function MenuPage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {filteredDesserts.map((dessert, index) => (
+          {(filteredDesserts || []).map((dessert, index) => (
             <motion.div
               key={dessert.id}
               initial={{ opacity: 0, y: 30 }}
@@ -96,7 +96,7 @@ export function MenuPage() {
           ))}
         </motion.div>
 
-        {filteredDesserts.length === 0 && (
+        {(filteredDesserts || []).length === 0 && (
           <motion.div
             className="text-center py-12"
             initial={{ opacity: 0 }}

@@ -17,7 +17,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 const TAX_RATE = 0.0875 // 8.75% tax
 const DELIVERY_FEE = 4.99
 
-function calculateCartTotals(items: CartItem[]): Cart {
+function calculateCartTotals(items: CartItem[] | undefined): Cart {
   const itemsArray = items || []
   const subtotal = itemsArray.reduce((sum, item) => sum + (item.dessert.price * item.quantity), 0)
   const tax = subtotal * TAX_RATE
@@ -36,7 +36,7 @@ function calculateCartTotals(items: CartItem[]): Cart {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useKV<CartItem[]>('cart-items', [])
 
-  const cart = calculateCartTotals(cartItems || [])
+  const cart = calculateCartTotals(cartItems)
 
   const addToCart = useCallback((dessert: Dessert, quantity = 1, specialInstructions?: string) => {
     if (!dessert.available) {

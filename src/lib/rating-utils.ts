@@ -6,17 +6,17 @@ export async function updateDessertRating(dessertId: string) {
     const reviewsKey = `reviews-${dessertId}`
     const reviews = await spark.kv.get<Review[]>(reviewsKey) || []
     
-    if (reviews.length === 0) {
+    if ((reviews || []).length === 0) {
       return { rating: 0, reviewCount: 0 }
     }
     
     // Calculate average rating
-    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0)
-    const averageRating = totalRating / reviews.length
+    const totalRating = (reviews || []).reduce((sum, review) => sum + review.rating, 0)
+    const averageRating = totalRating / (reviews || []).length
     
     return {
       rating: Math.round(averageRating * 10) / 10, // Round to 1 decimal place
-      reviewCount: reviews.length
+      reviewCount: (reviews || []).length
     }
   } catch (error) {
     console.error('Error updating dessert rating:', error)

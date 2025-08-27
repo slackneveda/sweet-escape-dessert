@@ -74,7 +74,7 @@ export function StripePaymentForm({
         metadata: {
           orderId: orderId,
           customerEmail: customerEmail,
-          itemCount: cart.items.length.toString()
+          itemCount: (cart.items || []).length.toString()
         }
       })
 

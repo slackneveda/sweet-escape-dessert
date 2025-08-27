@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(adminUser)
       setIsLoading(false)
       return true
-    } else if (email.includes('@') && password.length >= 6) {
+    } else if (email && email.includes('@') && password && password.length >= 6) {
       const regularUser: User = {
         id: '2',
         name: 'Customer',
