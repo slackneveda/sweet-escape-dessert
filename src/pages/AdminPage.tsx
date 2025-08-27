@@ -75,6 +75,8 @@ export function AdminPage() {
       const newDessert: Dessert = {
         id: Date.now().toString(),
         image: '',
+        rating: 0,
+        reviewCount: 0,
         ...data
       }
       setDesserts((current) => [...current, newDessert])

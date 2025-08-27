@@ -46,9 +46,14 @@ Sweet Delights needs to transition from a traditional cafe to a modern digital-f
 - **Success Criteria**: Real-time status updates, accurate delivery estimates, easy reordering
 
 ### 5. Menu Browsing & Search
-- **Functionality**: Category filtering, detailed product information, availability status
-- **Purpose**: Help customers discover and select products efficiently
-- **Success Criteria**: Fast product discovery, clear product information, accurate availability
+- **Functionality**: Category filtering, detailed product information, availability status, customer ratings and reviews
+- **Purpose**: Help customers discover and select products efficiently with social proof
+- **Success Criteria**: Easy navigation, comprehensive product details, helpful customer feedback
+
+### 6. Customer Reviews & Ratings
+- **Functionality**: Star ratings, written reviews, verified purchase badges, review sorting and filtering
+- **Purpose**: Provide social proof and help customers make informed purchasing decisions
+- **Success Criteria**: High review participation rate, helpful and authentic feedback, improved customer confidence
 
 ## Design Direction
 

@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { DessertCard } from '@/components/DessertCard'
+import { DessertDetailModal } from '@/components/DessertDetailModal'
 import { Badge } from '@/components/ui/badge'
 import { Dessert } from '@/types'
 import { TrendingUp, Crown } from '@phosphor-icons/react'
@@ -8,6 +10,18 @@ import { TrendingUp, Crown } from '@phosphor-icons/react'
 export function FeaturedPage() {
   const [desserts] = useKV<Dessert[]>('desserts', [])
   const featuredDesserts = desserts.filter(d => d.featured && d.available)
+  const [selectedDessert, setSelectedDessert] = useState<Dessert | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+
+  const handleSelectDessert = (dessert: Dessert) => {
+    setSelectedDessert(dessert)
+    setIsDetailModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsDetailModalOpen(false)
+    setSelectedDessert(null)
+  }
 
   return (
     <div className="min-h-screen py-8">
@@ -68,7 +82,10 @@ export function FeaturedPage() {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className="relative"
                 >
-                  <DessertCard dessert={dessert} />
+                  <DessertCard 
+                    dessert={dessert} 
+                    onSelect={handleSelectDessert}
+                  />
                   {index === 0 && (
                     <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground">
                       #1 Best Seller
@@ -111,6 +128,13 @@ export function FeaturedPage() {
             </p>
           </motion.div>
         )}
+        
+        {/* Dessert Detail Modal */}
+        <DessertDetailModal
+          dessert={selectedDessert}
+          isOpen={isDetailModalOpen}
+          onClose={handleCloseModal}
+        />
       </div>
     </div>
   )

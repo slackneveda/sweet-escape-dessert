@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { DessertCard } from '@/components/DessertCard'
+import { DessertDetailModal } from '@/components/DessertDetailModal'
 import { Button } from '@/components/ui/button'
 import { Dessert } from '@/types'
 
@@ -18,6 +19,8 @@ export function MenuPage() {
   const [desserts] = useKV<Dessert[]>('desserts', [])
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [filteredDesserts, setFilteredDesserts] = useState<Dessert[]>([])
+  const [selectedDessert, setSelectedDessert] = useState<Dessert | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
   useEffect(() => {
     if (selectedCategory === 'all') {
@@ -26,6 +29,16 @@ export function MenuPage() {
       setFilteredDesserts(desserts.filter(d => d.category === selectedCategory && d.available))
     }
   }, [desserts, selectedCategory])
+
+  const handleSelectDessert = (dessert: Dessert) => {
+    setSelectedDessert(dessert)
+    setIsDetailModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsDetailModalOpen(false)
+    setSelectedDessert(null)
+  }
 
   return (
     <div className="min-h-screen py-8">
@@ -75,7 +88,10 @@ export function MenuPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
             >
-              <DessertCard dessert={dessert} />
+              <DessertCard 
+                dessert={dessert} 
+                onSelect={handleSelectDessert}
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -95,6 +111,13 @@ export function MenuPage() {
             </p>
           </motion.div>
         )}
+        
+        {/* Dessert Detail Modal */}
+        <DessertDetailModal
+          dessert={selectedDessert}
+          isOpen={isDetailModalOpen}
+          onClose={handleCloseModal}
+        />
       </div>
     </div>
   )

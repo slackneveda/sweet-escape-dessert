@@ -1,5 +1,5 @@
 import { useKV } from '@github/spark/hooks'
-import { Dessert } from '@/types'
+import { Dessert, Review } from '@/types'
 
 const sampleDesserts: Dessert[] = [
   {
@@ -10,7 +10,9 @@ const sampleDesserts: Dessert[] = [
     category: 'cakes',
     image: '🍰',
     featured: true,
-    available: true
+    available: true,
+    rating: 4.8,
+    reviewCount: 24
   },
   {
     id: '2',
@@ -20,7 +22,9 @@ const sampleDesserts: Dessert[] = [
     category: 'cakes',
     image: '🍰',
     featured: true,
-    available: true
+    available: true,
+    rating: 4.6,
+    reviewCount: 18
   },
   {
     id: '3',
@@ -30,7 +34,9 @@ const sampleDesserts: Dessert[] = [
     category: 'pastries',
     image: '🧁',
     featured: false,
-    available: true
+    available: true,
+    rating: 4.9,
+    reviewCount: 31
   },
   {
     id: '4',
@@ -40,7 +46,9 @@ const sampleDesserts: Dessert[] = [
     category: 'ice-creams',
     image: '🍦',
     featured: false,
-    available: true
+    available: true,
+    rating: 4.5,
+    reviewCount: 12
   },
   {
     id: '5',
@@ -50,7 +58,9 @@ const sampleDesserts: Dessert[] = [
     category: 'cookies',
     image: '🍪',
     featured: false,
-    available: true
+    available: true,
+    rating: 4.7,
+    reviewCount: 29
   },
   {
     id: '6',
@@ -60,16 +70,106 @@ const sampleDesserts: Dessert[] = [
     category: 'seasonal',
     image: '🎃',
     featured: true,
-    available: true
+    available: true,
+    rating: 4.4,
+    reviewCount: 15
   }
 ]
 
+const sampleReviews: { [dessertId: string]: Review[] } = {
+  '1': [
+    {
+      id: 'r1-1',
+      dessertId: '1',
+      userId: 'user1',
+      userName: 'Sarah Johnson',
+      rating: 5,
+      comment: 'Absolutely divine! The molten center was perfect and the vanilla ice cream complemented it beautifully.',
+      date: new Date('2024-01-15'),
+      verified: true
+    },
+    {
+      id: 'r1-2',
+      dessertId: '1',
+      userId: 'user2',
+      userName: 'Mike Chen',
+      rating: 5,
+      comment: 'Best chocolate lava cake I\'ve ever had. Worth every penny!',
+      date: new Date('2024-01-10'),
+      verified: true
+    },
+    {
+      id: 'r1-3',
+      dessertId: '1',
+      userId: 'user3',
+      userName: 'Emma Wilson',
+      rating: 4,
+      comment: 'Really good but could use a bit more chocolate in the center. Still recommend!',
+      date: new Date('2024-01-08'),
+      verified: true
+    }
+  ],
+  '2': [
+    {
+      id: 'r2-1',
+      dessertId: '2',
+      userId: 'user4',
+      userName: 'David Rodriguez',
+      rating: 5,
+      comment: 'Creamy, rich, and the strawberries were so fresh. Perfect cheesecake!',
+      date: new Date('2024-01-12'),
+      verified: true
+    },
+    {
+      id: 'r2-2',
+      dessertId: '2',
+      userId: 'user5',
+      userName: 'Lisa Park',
+      rating: 4,
+      comment: 'Great texture and flavor. The berry coulis was a nice touch.',
+      date: new Date('2024-01-09'),
+      verified: true
+    }
+  ],
+  '3': [
+    {
+      id: 'r3-1',
+      dessertId: '3',
+      userId: 'user6',
+      userName: 'James Thompson',
+      rating: 5,
+      comment: 'These macarons are works of art! Perfect texture and amazing flavors.',
+      date: new Date('2024-01-14'),
+      verified: true
+    },
+    {
+      id: 'r3-2',
+      dessertId: '3',
+      userId: 'user7',
+      userName: 'Sophie Miller',
+      rating: 5,
+      comment: 'Absolutely perfect macarons. The raspberry flavor is incredible!',
+      date: new Date('2024-01-11'),
+      verified: true
+    }
+  ]
+}
+
 export function DataInitializer() {
   const [desserts, setDesserts] = useKV<Dessert[]>('desserts', [])
+  const [reviewsInitialized, setReviewsInitialized] = useKV<boolean>('reviews-initialized', false)
 
   // Initialize sample data if empty
   if (desserts.length === 0) {
     setDesserts(sampleDesserts)
+  }
+
+  // Initialize sample reviews if not done yet
+  if (!reviewsInitialized) {
+    Object.entries(sampleReviews).forEach(([dessertId, reviews]) => {
+      spark.kv.set(`reviews-${dessertId}`, reviews)
+    })
+    setReviewsInitialized(true)
   }
 
   return null

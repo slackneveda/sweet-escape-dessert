@@ -7,6 +7,8 @@ export interface Dessert {
   image: string
   featured: boolean
   available: boolean
+  rating: number
+  reviewCount: number
 }
 
 export interface User {
@@ -68,4 +70,15 @@ export interface PaymentInfo {
   status: 'pending' | 'paid' | 'failed' | 'refunded'
   transactionId?: string
   amount: number
+}
+
+export interface Review {
+  id: string
+  dessertId: string
+  userId: string
+  userName: string
+  rating: number
+  comment: string
+  date: Date
+  verified: boolean
 }

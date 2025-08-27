@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { AddToCartButton } from '@/components/AddToCartButton'
+import { StarRating } from '@/components/StarRating'
 import { Dessert } from '@/types'
 
 interface DessertCardProps {
@@ -48,6 +49,14 @@ export function DessertCard({ dessert, onSelect, showActions, showCartButton = t
             <p className="text-sm text-muted-foreground line-clamp-2">
               {dessert.description}
             </p>
+            
+            {/* Rating and reviews */}
+            <div className="flex items-center gap-2">
+              <StarRating rating={dessert.rating} size="sm" />
+              <span className="text-xs text-muted-foreground">
+                {dessert.rating.toFixed(1)} ({dessert.reviewCount} review{dessert.reviewCount !== 1 ? 's' : ''})
+              </span>
+            </div>
             
             <div className="flex items-center justify-between">
               <Badge variant="secondary" className="capitalize">
