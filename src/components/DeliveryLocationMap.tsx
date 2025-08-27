@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { GoogleMap, useJSApiLoader, Marker } from '@react-google-maps/api'
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api'
 import { MapPin, Navigation } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -37,10 +37,9 @@ export function DeliveryLocationMap({ onLocationSelect, selectedLocation }: Deli
   const isApiKeyConfigured = apiKey && apiKey !== 'YOUR_API_KEY_HERE'
 
   // Load Google Maps API
-  const { isLoaded, loadError } = useJSApiLoader({
-    id: 'google-map-script',
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey || '',
-    libraries: ['geometry', 'drawing']
+    libraries: ['geometry', 'drawing'] as const
   })
 
   // Handle load error
