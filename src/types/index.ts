@@ -81,4 +81,8 @@ export interface Review {
   comment: string
   date: Date
   verified: boolean
+  status: 'pending' | 'approved' | 'rejected'
+  moderationNote?: string
+  moderatedBy?: string
+  moderatedAt?: Date
 }

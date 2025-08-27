@@ -76,100 +76,121 @@ const sampleDesserts: Dessert[] = [
   }
 ]
 
-const sampleReviews: { [dessertId: string]: Review[] } = {
-  '1': [
-    {
-      id: 'r1-1',
-      dessertId: '1',
-      userId: 'user1',
-      userName: 'Sarah Johnson',
-      rating: 5,
-      comment: 'Absolutely divine! The molten center was perfect and the vanilla ice cream complemented it beautifully.',
-      date: new Date('2024-01-15'),
-      verified: true
-    },
-    {
-      id: 'r1-2',
-      dessertId: '1',
-      userId: 'user2',
-      userName: 'Mike Chen',
-      rating: 5,
-      comment: 'Best chocolate lava cake I\'ve ever had. Worth every penny!',
-      date: new Date('2024-01-10'),
-      verified: true
-    },
-    {
-      id: 'r1-3',
-      dessertId: '1',
-      userId: 'user3',
-      userName: 'Emma Wilson',
-      rating: 4,
-      comment: 'Really good but could use a bit more chocolate in the center. Still recommend!',
-      date: new Date('2024-01-08'),
-      verified: true
-    }
-  ],
-  '2': [
-    {
-      id: 'r2-1',
-      dessertId: '2',
-      userId: 'user4',
-      userName: 'David Rodriguez',
-      rating: 5,
-      comment: 'Creamy, rich, and the strawberries were so fresh. Perfect cheesecake!',
-      date: new Date('2024-01-12'),
-      verified: true
-    },
-    {
-      id: 'r2-2',
-      dessertId: '2',
-      userId: 'user5',
-      userName: 'Lisa Park',
-      rating: 4,
-      comment: 'Great texture and flavor. The berry coulis was a nice touch.',
-      date: new Date('2024-01-09'),
-      verified: true
-    }
-  ],
-  '3': [
-    {
-      id: 'r3-1',
-      dessertId: '3',
-      userId: 'user6',
-      userName: 'James Thompson',
-      rating: 5,
-      comment: 'These macarons are works of art! Perfect texture and amazing flavors.',
-      date: new Date('2024-01-14'),
-      verified: true
-    },
-    {
-      id: 'r3-2',
-      dessertId: '3',
-      userId: 'user7',
-      userName: 'Sophie Miller',
-      rating: 5,
-      comment: 'Absolutely perfect macarons. The raspberry flavor is incredible!',
-      date: new Date('2024-01-11'),
-      verified: true
-    }
-  ]
-}
+const sampleReviews: Review[] = [
+  // Approved reviews
+  {
+    id: 'r1-1',
+    dessertId: '1',
+    userId: 'user1',
+    userName: 'Sarah Johnson',
+    rating: 5,
+    comment: 'Absolutely divine! The molten center was perfect and the vanilla ice cream complemented it beautifully.',
+    date: new Date('2024-01-15'),
+    verified: true,
+    status: 'approved',
+    moderatedBy: 'Admin',
+    moderatedAt: new Date('2024-01-15')
+  },
+  {
+    id: 'r1-2',
+    dessertId: '1',
+    userId: 'user2',
+    userName: 'Mike Chen',
+    rating: 5,
+    comment: 'Best chocolate lava cake I\'ve ever had. Worth every penny!',
+    date: new Date('2024-01-10'),
+    verified: true,
+    status: 'approved',
+    moderatedBy: 'Admin',
+    moderatedAt: new Date('2024-01-10')
+  },
+  {
+    id: 'r2-1',
+    dessertId: '2',
+    userId: 'user4',
+    userName: 'David Rodriguez',
+    rating: 5,
+    comment: 'Creamy, rich, and the strawberries were so fresh. Perfect cheesecake!',
+    date: new Date('2024-01-12'),
+    verified: true,
+    status: 'approved',
+    moderatedBy: 'Admin',
+    moderatedAt: new Date('2024-01-12')
+  },
+  // Pending reviews (need moderation)
+  {
+    id: 'r3-pending-1',
+    dessertId: '3',
+    userId: 'user8',
+    userName: 'Alex Smith',
+    rating: 5,
+    comment: 'These macarons are incredible! The texture is perfect and the flavors are so balanced. Highly recommend the raspberry one!',
+    date: new Date('2024-01-20'),
+    verified: true,
+    status: 'pending'
+  },
+  {
+    id: 'r1-pending-1',
+    dessertId: '1',
+    userId: 'user9',
+    userName: 'Maria Garcia',
+    rating: 4,
+    comment: 'Good lava cake but I think it could use a bit more chocolate sauce. The ice cream was delicious though!',
+    date: new Date('2024-01-19'),
+    verified: false,
+    status: 'pending'
+  },
+  {
+    id: 'r4-pending-1',
+    dessertId: '4',
+    userId: 'user10',
+    userName: 'John Lee',
+    rating: 5,
+    comment: 'Amazing vanilla ice cream! You can really taste the quality of the vanilla beans. Will definitely order again.',
+    date: new Date('2024-01-18'),
+    verified: true,
+    status: 'pending'
+  },
+  {
+    id: 'r5-pending-1',
+    dessertId: '5',
+    userId: 'user11',
+    userName: 'Rachel Wong',
+    rating: 3,
+    comment: 'Cookies were okay but a bit too sweet for my taste. They were fresh though.',
+    date: new Date('2024-01-17'),
+    verified: false,
+    status: 'pending'
+  },
+  // A rejected review example
+  {
+    id: 'r6-rejected-1',
+    dessertId: '6',
+    userId: 'user12',
+    userName: 'Anonymous User',
+    rating: 1,
+    comment: 'This is spam content with inappropriate language that should not be displayed.',
+    date: new Date('2024-01-16'),
+    verified: false,
+    status: 'rejected',
+    moderationNote: 'Contains inappropriate content and appears to be spam.',
+    moderatedBy: 'Admin',
+    moderatedAt: new Date('2024-01-16')
+  }
+]
 
 export function DataInitializer() {
   const [desserts, setDesserts] = useKV<Dessert[]>('desserts', [])
-  const [reviewsInitialized, setReviewsInitialized] = useKV<boolean>('reviews-initialized', false)
+  const [reviews, setReviews] = useKV<Review[]>('reviews', [])
 
   // Initialize sample data if empty
   if (desserts.length === 0) {
     setDesserts(sampleDesserts)
   }
 
-  // Initialize sample reviews if not done yet
-  if (!reviewsInitialized) {
-    Object.entries(sampleReviews).forEach(([dessertId, reviews]) => {
-      spark.kv.set(`reviews-${dessertId}`, reviews)
-    })
-    setReviewsInitialized(true)
+  // Initialize sample reviews if empty
+  if (reviews.length === 0) {
+    setReviews(sampleReviews)
   }
 
   return null

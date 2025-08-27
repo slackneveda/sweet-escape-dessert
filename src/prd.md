@@ -48,12 +48,22 @@ Sweet Delights needs to transition from a traditional cafe to a modern digital-f
 ### 5. Menu Browsing & Search
 - **Functionality**: Category filtering, detailed product information, availability status, customer ratings and reviews
 - **Purpose**: Help customers discover and select products efficiently with social proof
-- **Success Criteria**: Easy navigation, comprehensive product details, helpful customer feedback
+- **Success Criteria**: Fast filtering, comprehensive product details, trusted review system
 
 ### 6. Customer Reviews & Ratings
-- **Functionality**: Star ratings, written reviews, verified purchase badges, review sorting and filtering
-- **Purpose**: Provide social proof and help customers make informed purchasing decisions
-- **Success Criteria**: High review participation rate, helpful and authentic feedback, improved customer confidence
+- **Functionality**: Star ratings, written reviews, verified purchase badges, review filtering
+- **Purpose**: Build trust through authentic customer feedback and improve product decision-making
+- **Success Criteria**: High review participation rate, helpful review content, improved conversion through social proof
+
+### 7. Review Moderation System (Admin)
+- **Functionality**: Admin dashboard for reviewing, approving, and rejecting customer reviews with moderation notes
+- **Purpose**: Maintain review quality and prevent spam or inappropriate content from being displayed
+- **Success Criteria**: Efficient moderation workflow, clear approval/rejection reasons, maintained review authenticity
+
+### 8. Admin Dashboard
+- **Functionality**: Product management (add, edit, delete), review moderation, order tracking, analytics
+- **Purpose**: Provide business owners comprehensive control over their online presence
+- **Success Criteria**: Intuitive interface, real-time updates, comprehensive management capabilities
 
 ## Design Direction
 
