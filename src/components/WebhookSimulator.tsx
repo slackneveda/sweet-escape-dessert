@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Webhook, Play, CheckCircle, XCircle, Clock } from '@phosphor-icons/react'
+import { Webhook, Play, CheckCircle, XCircle, Clock } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

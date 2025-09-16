@@ -5,7 +5,7 @@ import { StarRating } from '@/components/StarRating'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { Reviews } from '@/components/Reviews'
 import { Dessert } from '@/types'
-import { X } from '@phosphor-icons/react'
+import { X } from 'lucide-react'
 
 interface DessertDetailModalProps {
   dessert: Dessert | null

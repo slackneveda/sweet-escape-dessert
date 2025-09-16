@@ -1,27 +1,31 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { CartIcon } from '@/components/CartIcon'
-import { CartSidebar } from '@/components/CartSidebar'
 import { useAuth } from '@/contexts/AuthContext'
-import { List, Cake } from '@phosphor-icons/react'
-
-const navItems = [
-  { name: 'Home', path: '/' },
-  { name: 'Menu', path: '/menu' },
-  { name: 'Featured', path: '/featured' },
-  { name: 'Orders', path: '/orders' },
-  { name: 'Contact', path: '/contact' },
-]
+import { Menu, Coffee, LogIn, User, UserPlus } from 'lucide-react'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isCartOpen, setIsCartOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
   const { user } = useAuth()
+
+  // Base navigation items
+  const baseNavItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Menu', path: '/menu' },
+    { name: 'Featured', path: '/featured' },
+    { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Orders', path: '/orders' },
+    { name: 'Contact', path: '/contact' },
+  ]
+
+  // Navigation items (no conditional logic needed since dashboard and profile are always accessible)
+  const navItems = baseNavItems
 
   const NavLink = ({ item, mobile = false }: { item: { name: string; path: string }, mobile?: boolean }) => {
     const isActive = location.pathname === item.path
@@ -47,10 +51,9 @@ export function Navbar() {
         </motion.span>
         {isActive && !mobile && (
           <motion.div
-            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
             layoutId="activeTab"
             initial={false}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
           />
         )}
       </Link>
@@ -58,47 +61,57 @@ export function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Cake className="h-6 w-6 text-primary" />
-            </motion.div>
-            <span className="font-bold text-xl text-primary">Sweet Delights</span>
+            <Coffee className="h-8 w-8 text-primary" />
+            <span className="font-bold text-xl text-foreground">Sweet Escape</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <NavLink key={item.path} item={item} />
             ))}
-            {user && (
-              <Link to="/profile">
-                <Button variant="ghost" size="sm">Profile</Button>
-              </Link>
+          </div>
+
+          {/* Right Side Actions */}
+          <div className="hidden md:flex items-center space-x-4">
+            {!user ? (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/login')}
+                className="flex items-center space-x-2"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign In</span>
+              </Button>
+            ) : (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center space-x-2"
+              >
+                <User className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Button>
             )}
-            {user?.isAdmin && (
-              <Link to="/admin">
-                <Button variant="outline" size="sm">Admin</Button>
-              </Link>
-            )}
-            <CartIcon onClick={() => setIsCartOpen(true)} />
+            <CartIcon onClick={() => navigate('/checkout')} />
             <ThemeToggle />
           </div>
 
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center space-x-2">
-            <CartIcon onClick={() => setIsCartOpen(true)} />
+            <CartIcon onClick={() => navigate('/checkout')} />
             <ThemeToggle />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="sm">
-                  <List className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-64">
@@ -106,29 +119,41 @@ export function Navbar() {
                   {navItems.map((item) => (
                     <NavLink key={item.path} item={item} mobile />
                   ))}
-                  {user && (
-                    <Link to="/profile" onClick={() => setIsOpen(false)}>
-                      <span className="block py-2 text-lg text-foreground hover:text-primary">
-                        Profile
-                      </span>
-                    </Link>
-                  )}
-                  {user?.isAdmin && (
-                    <Link to="/admin" onClick={() => setIsOpen(false)}>
-                      <span className="block py-2 text-lg text-foreground hover:text-primary">
-                        Admin
-                      </span>
-                    </Link>
-                  )}
+                  
+                  {/* Login/User Button for Mobile */}
+                  <div className="pt-4 border-t space-y-2">
+                    {!user ? (
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => {
+                          navigate('/login')
+                          setIsOpen(false)
+                        }}
+                      >
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => {
+                          navigate('/dashboard')
+                          setIsOpen(false)
+                        }}
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
         </div>
       </div>
-
-      {/* Cart Sidebar */}
-      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   )
 }

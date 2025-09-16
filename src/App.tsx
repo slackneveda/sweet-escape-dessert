@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { CartProvider } from '@/contexts/CartContext'
 import { StripeProvider } from '@/contexts/StripeContext'
+import { CartProvider } from '@/contexts/CartContext'
 import { DataInitializer } from '@/components/DataInitializer'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
@@ -12,9 +12,11 @@ import { HomePage } from '@/pages/HomePage'
 import { MenuPage } from '@/pages/MenuPage'
 import { FeaturedPage } from '@/pages/FeaturedPage'
 import { ContactPage } from '@/pages/ContactPage'
-import { ProfilePage } from '@/pages/ProfilePage'
-import { AdminPage } from '@/pages/AdminPage'
 import { OrdersPage } from '@/pages/OrdersPage'
+import { CheckoutPage } from '@/pages/CheckoutPage'
+import { ReviewsPage } from '@/pages/ReviewsPage'
+import { DashboardPage } from '@/pages/DashboardPage'
+import { LoginPage } from '@/pages/LoginPage'
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -62,26 +64,6 @@ function AnimatedRoutes() {
             <ContactPage />
           </motion.div>
         } />
-        <Route path="/profile" element={
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ProfilePage />
-          </motion.div>
-        } />
-        <Route path="/admin" element={
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <AdminPage />
-          </motion.div>
-        } />
         <Route path="/orders" element={
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -90,6 +72,46 @@ function AnimatedRoutes() {
             transition={{ duration: 0.3 }}
           >
             <OrdersPage />
+          </motion.div>
+        } />
+        <Route path="/checkout" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <CheckoutPage />
+          </motion.div>
+        } />
+        <Route path="/reviews" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ReviewsPage />
+          </motion.div>
+        } />
+        <Route path="/dashboard" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <DashboardPage />
+          </motion.div>
+        } />
+        <Route path="/login" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <LoginPage />
           </motion.div>
         } />
       </Routes>

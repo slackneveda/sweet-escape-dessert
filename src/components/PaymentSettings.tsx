@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { CreditCard, Eye, EyeSlash, CheckCircle, Warning } from '@phosphor-icons/react'
+import { CreditCard, Eye, EyeOff, CheckCircle, AlertTriangle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -192,7 +192,7 @@ export function PaymentSettings() {
                     onClick={() => setShowSecretKey(!showSecretKey)}
                     className="h-6 w-6 p-0"
                   >
-                    {showSecretKey ? <EyeSlash size={14} /> : <Eye size={14} />}
+                    {showSecretKey ? <EyeOff size={14} /> : <Eye size={14} />}
                   </Button>
                 </div>
               </div>

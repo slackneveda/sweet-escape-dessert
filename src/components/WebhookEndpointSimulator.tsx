@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Copy, Code, Play, Terminal, CheckCircle2, XCircle } from '@phosphor-icons/react'
+import { Copy, Code, Play, Terminal, CheckCircle2, XCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { webhookService } from '@/services/webhookService'
 

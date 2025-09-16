@@ -16,6 +16,7 @@ export interface User {
   name: string
   email: string
   isAdmin: boolean
+  picture?: string
 }
 
 export interface ContactForm {

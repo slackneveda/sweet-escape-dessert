@@ -24,8 +24,21 @@ export function DessertCard({ dessert, onSelect, showActions, showCartButton = t
     >
       <Card className="overflow-hidden cursor-pointer group border-border/50 hover:border-primary/50 transition-colors duration-300">
         <div className="relative overflow-hidden">
-          <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
-            <span className="text-4xl">🧁</span>
+          <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 overflow-hidden">
+            <img 
+              src={dessert.image} 
+              alt={dessert.name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              onError={(e) => {
+                // Fallback to placeholder if image fails to load
+                e.currentTarget.style.display = 'none'
+                const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                if (fallback) fallback.style.display = 'flex'
+              }}
+            />
+            <div className="w-full h-full absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/20 hidden items-center justify-center">
+              <span className="text-4xl">🧁</span>
+            </div>
           </div>
           {dessert.featured && (
             <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
