@@ -24,7 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
 **/agent-eval-report*
 packages
 pids
@@ -32,3 +31,4 @@ pids
 .devcontainer/
 
 .spark-workbench-id
+config.bat

@@ -1,0 +1,39 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "sonner",
+    "magicui",
+    "lucide",
+    "framer",
+    "vite",
+    "tsx",
+    "tailwindcss",
+    "radix",
+    "shadcn",
+    "oklch",
+    "desserts",
+    "sweetdelights",
+    "aurora",
+    "navbar",
+    "signin",
+    "signup",
+    "logout",
+    "macarons",
+    "Macarons",
+    "mascarpone",
+    "Valrhona",
+    "tiramisu",
+    "artisan",
+    "boutique",
+    "livemode",
+    "idempotency"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".git/**"
+  ]
+}

@@ -1,4 +1,4 @@
-import { ShoppingCart } from '@phosphor-icons/react'
+import { ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/contexts/CartContext'
 import { motion } from 'framer-motion'
@@ -19,7 +19,7 @@ export function CartIcon({ onClick, className = '' }: CartIconProps) {
       onClick={onClick}
       className={`relative ${className}`}
     >
-      <ShoppingCart size={20} />
+          <ShoppingCart className="h-6 w-6" />
       {itemCount > 0 && (
         <motion.div
           initial={{ scale: 0 }}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Clock, MapPin, CheckCircle, Package, Truck, XCircle } from '@phosphor-icons/react'
+import { Clock, MapPin, CheckCircle, Package, Truck, XCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
