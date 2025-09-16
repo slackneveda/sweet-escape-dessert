@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Review, Dessert } from '@/types'
-import { Check, X, Eye, Clock, Shield } from '@phosphor-icons/react'
+import { Check, X, Eye, Clock, Shield } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface ReviewModerationProps {
@@ -26,7 +26,7 @@ interface ModerationAction {
 export function ReviewModeration({ className }: ReviewModerationProps) {
   const { user } = useAuth()
   const [reviews, setReviews] = useKV<Review[]>('reviews', [])
-  const [desserts, setDesserts] = useKV<Dessert[]>('desserts', [])
+  const [desserts, setDesserts] = useKV<Dessert[]>('desserts-v2', [])
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [moderationNote, setModerationNote] = useState('')
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false)

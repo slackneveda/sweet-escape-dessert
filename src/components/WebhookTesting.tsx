@@ -1,4 +1,4 @@
-import { Lightning } from '@phosphor-icons/react'
+import { Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useWebhookListener } from '@/hooks/useWebhookListener'
 
@@ -29,7 +29,7 @@ export function WebhookTesting({ orderId, paymentIntentId }: WebhookTestingProps
   return (
     <div className="bg-muted/50 border rounded-lg p-3">
       <h4 className="font-medium mb-2 text-sm flex items-center gap-2">
-        <Lightning size={16} />
+        <Zap size={16} />
         Webhook Testing (Dev Mode)
       </h4>
       <p className="text-xs text-muted-foreground mb-3">

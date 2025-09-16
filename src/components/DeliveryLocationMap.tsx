@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api'
-import { MapPin, Navigation } from '@phosphor-icons/react'
+import { MapPin, Navigation } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'

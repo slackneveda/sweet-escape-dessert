@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useKV } from '@github/spark/hooks'
 import { Review, Dessert } from '@/types'
 import { updateDessertRating } from '@/lib/rating-utils'
-import { CheckCircle, User } from '@phosphor-icons/react'
+import { CheckCircle, User } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface ReviewsProps {
@@ -20,7 +20,7 @@ interface ReviewsProps {
 export function Reviews({ dessertId, dessertName }: ReviewsProps) {
   const { user } = useAuth()
   const [reviews, setReviews] = useKV<Review[]>(`reviews-${dessertId}`, [])
-  const [desserts, setDesserts] = useKV<Dessert[]>('desserts', [])
+  const [desserts, setDesserts] = useKV<Dessert[]>('desserts-v2', [])
   const [showAddReview, setShowAddReview] = useState(false)
   const [newRating, setNewRating] = useState(0)
   const [newComment, setNewComment] = useState('')

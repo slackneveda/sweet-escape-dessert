@@ -6,10 +6,10 @@ import { DessertDetailModal } from '@/components/DessertDetailModal'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dessert } from '@/types'
-import { TrendingUp, Crown, CreditCard, Shield, Clock } from '@phosphor-icons/react'
+import { TrendingUp, Crown, CreditCard, Shield, Clock } from 'lucide-react'
 
 export function FeaturedPage() {
-  const [desserts] = useKV<Dessert[]>('desserts', [])
+  const [desserts] = useKV<Dessert[]>('desserts-v2', [])
   const featuredDesserts = (desserts || []).filter(d => d.featured && d.available)
   const [selectedDessert, setSelectedDessert] = useState<Dessert | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)

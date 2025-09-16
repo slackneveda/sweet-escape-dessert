@@ -107,6 +107,7 @@
 /*
   ---break---
 */
+/* stylelint-disable at-rule-no-unknown */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -171,7 +172,25 @@
       height: 0;
     }
   }
-}
+  --animate-aurora: aurora 8s ease-in-out infinite;
+  
+  @keyframes aurora {
+    0% {
+      background-position: 0% 50%;
+    }
+    25% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 50% 100%;
+    }
+    75% {
+      background-position: 50% 0%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }}
 
 /*
   ---break---
