@@ -4,17 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  BookOpen, 
-  CheckCircle2, 
-  Code, 
-  ExternalLink, 
-  Lightbulb,
-  PlayCircle,
-  Terminal,
-  Webhook,
-  Zap
-} from '@phosphor-icons/react'
+import { BookOpen, CheckCircle2, Code, ExternalLink, Lightbulb, PlayCircle, Terminal, Webhook, Zap } from 'lucide-react'
 
 export function WebhookTestingGuide() {
   const testingSteps = [

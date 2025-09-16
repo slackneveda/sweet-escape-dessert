@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ShoppingCart, Plus, Minus } from '@phosphor-icons/react'
+import { ShoppingCart, Plus, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -76,7 +76,7 @@ export function AddToCartButton({
           animate={isAdding ? { scale: [1, 0.9, 1] } : {}}
           transition={{ duration: 0.3 }}
         >
-          <ShoppingCart size={16} />
+                      <ShoppingCart className="w-4 h-4 mr-2" />
           {isAdding ? 'Added!' : 'Add to Cart'}
         </motion.div>
       </Button>

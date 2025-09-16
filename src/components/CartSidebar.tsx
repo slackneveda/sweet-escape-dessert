@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Plus, Minus, ShoppingBag, Trash } from '@phosphor-icons/react'
+import { X, Plus, Minus, ShoppingBag, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,7 +31,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50"
+              className="fixed inset-0 bg-black/60 z-[100]"
               onClick={onClose}
             />
             
@@ -41,40 +41,51 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-lg bg-background shadow-2xl z-50 flex flex-col"
+              className="fixed right-0 top-0 h-full w-full max-w-lg bg-background shadow-2xl z-[101] flex flex-col border-l border-border"
+              style={{ backgroundColor: 'hsl(var(--background))' }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-border bg-card/50">
+              <div className="flex items-center justify-between p-6 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <ShoppingBag size={20} className="text-primary" />
+                  <div className="p-2.5 bg-primary/10 rounded-xl border border-primary/20">
+                    <ShoppingBag className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold">Shopping Cart</h2>
+                    <h2 className="text-xl font-bold text-foreground">Shopping Cart</h2>
                     <p className="text-sm text-muted-foreground">
                       {(cart.items || []).length} {(cart.items || []).length === 1 ? 'item' : 'items'}
                     </p>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="h-10 w-10">
+                <Button variant="ghost" size="icon" onClick={onClose} className="h-10 w-10 hover:bg-muted/80">
                   <X size={20} />
                 </Button>
               </div>
 
               {/* Cart Items */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto bg-background">
                 {(cart.items || []).length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full px-6 py-12">
-                    <div className="p-4 bg-muted/30 rounded-full mb-6">
-                      <ShoppingBag size={48} className="text-muted-foreground" />
+                  <div className="flex flex-col items-center justify-center h-full px-8 py-16 bg-background min-h-[500px]">
+                    <div className="relative">
+                      <div className="p-8 bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl mb-8 border border-primary/10 shadow-sm">
+                        <ShoppingBag size={72} className="text-primary/60" />
+                      </div>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-background border-2 border-primary/20 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-primary/60">0</span>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-medium mb-2">Your cart is empty</h3>
-                    <p className="text-muted-foreground text-center mb-6 max-w-sm">
-                      Add some delicious desserts to get started with your order
+                    <h3 className="text-2xl font-bold mb-4 text-foreground">Your cart is empty</h3>
+                    <p className="text-muted-foreground text-center mb-10 max-w-sm leading-relaxed text-base">
+                      Discover our delicious desserts and start building your perfect sweet collection
                     </p>
-                    <Button variant="outline" onClick={onClose} className="w-full max-w-xs">
-                      Continue Shopping
-                    </Button>
+                    <div className="space-y-3 w-full max-w-xs">
+                      <Button variant="default" onClick={onClose} className="w-full h-12 text-base font-semibold">
+                        Browse Menu
+                      </Button>
+                      <p className="text-xs text-center text-muted-foreground">
+                        Free delivery on orders over $25
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   <div className="p-6 space-y-6">
@@ -102,7 +113,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                 className="h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                 onClick={() => removeFromCart(item.id)}
                               >
-                                <Trash size={12} />
+                                              <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
                           </div>

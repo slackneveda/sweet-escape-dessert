@@ -16,18 +16,30 @@ const categories = [
 ]
 
 export function MenuPage() {
-  const [desserts] = useKV<Dessert[]>('desserts', [])
+  const [desserts] = useKV<Dessert[]>('desserts-v2', [])
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [filteredDesserts, setFilteredDesserts] = useState<Dessert[]>([])
   const [selectedDessert, setSelectedDessert] = useState<Dessert | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
   useEffect(() => {
+    console.log('📋 MenuPage: Filtering desserts...')
+    console.log('📋 Raw desserts from KV:', desserts)
+    console.log('📋 Is desserts an array?', Array.isArray(desserts))
+    console.log('📋 Desserts length:', desserts?.length || 0)
+    console.log('📋 Selected category:', selectedCategory)
+    
     const dessertsArray = Array.isArray(desserts) ? desserts : []
+    console.log('📋 Desserts array length:', dessertsArray.length)
+    
     if (selectedCategory === 'all') {
-      setFilteredDesserts(dessertsArray.filter(d => d.available))
+      const availableDesserts = dessertsArray.filter(d => d.available)
+      console.log('📋 Available desserts (all):', availableDesserts.length)
+      setFilteredDesserts(availableDesserts)
     } else {
-      setFilteredDesserts(dessertsArray.filter(d => d.category === selectedCategory && d.available))
+      const categoryDesserts = dessertsArray.filter(d => d.category === selectedCategory && d.available)
+      console.log(`📋 Available desserts (${selectedCategory}):`, categoryDesserts.length)
+      setFilteredDesserts(categoryDesserts)
     }
   }, [desserts, selectedCategory])
 

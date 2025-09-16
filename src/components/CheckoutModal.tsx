@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { CreditCard, MapPin, Phone, Clock, CheckCircle } from '@phosphor-icons/react'
+import { CreditCard, MapPin, Phone, Clock, CheckCircle } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

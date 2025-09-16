@@ -1,4 +1,4 @@
-import { Star } from '@phosphor-icons/react'
+import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface StarRatingProps {
@@ -49,7 +49,7 @@ export function StarRating({
             onClick={() => handleStarClick(starRating)}
             disabled={!interactive}
           >
-            <Star
+            <Star 
               className={cn(
                 sizeClasses[size],
                 isFilled 

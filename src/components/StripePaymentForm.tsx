@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 import { motion } from 'framer-motion'
-import { CreditCard, Lock } from '@phosphor-icons/react'
+import { CreditCard, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'

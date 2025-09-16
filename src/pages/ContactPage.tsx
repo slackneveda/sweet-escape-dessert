@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactForm } from '@/types'
-import { MapPin, Phone, Mail, Clock } from '@phosphor-icons/react'
+import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function ContactPage() {
@@ -159,7 +159,7 @@ export function ContactPage() {
                   </div>
                   
                   <div className="flex items-center space-x-4">
-                    <Mail className="h-6 w-6 text-primary flex-shrink-0" />
+                                  <Mail className="w-5 h-5 text-primary" />
                     <div>
                       <h4 className="font-medium">Email</h4>
                       <p className="text-muted-foreground">hello@sweetdelights.com</p>
